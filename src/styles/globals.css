@@ -66,4 +66,8 @@ body {
   .centered-relative {
     @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
   }
+
+  .no-focus-outline {
+    @apply focus:border-none focus:outline-none focus:ring-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-0;
+  }
 }
