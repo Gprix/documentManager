@@ -1,4 +1,4 @@
-export type ButtonType = "solid" | "outline";
+export type ButtonType = "solid" | "outline" | "transparent";
 
 export interface ButtonProps {
   children?: React.ReactNode;
@@ -8,4 +8,5 @@ export interface ButtonProps {
   onClick?: () => void;
   type?: ButtonType;
   textStyle?: string;
+  iconStyle?: string;
 }
