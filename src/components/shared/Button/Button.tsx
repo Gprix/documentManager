@@ -5,7 +5,7 @@ import { getContainerStyle, getTextStyle } from "./Button.helpers";
 const Button = (props: ButtonProps) => {
   const { children, className = "" } = props;
   const { onClick, leftIcon, rightIcon, type = "solid" } = props;
-  const { textStyle = "" } = props;
+  const { iconStyle = "", textStyle = "" } = props;
 
   return (
     <button
@@ -14,12 +14,16 @@ const Button = (props: ButtonProps) => {
       )} block transition-all duration-500 ease-in-out ${className}`}
       onClick={onClick}
     >
-      <div className="flex flex-nowrap">
-        {leftIcon ? <Image src={leftIcon} alt="" className="mr-4" /> : null}
+      <div className="flex flex-nowrap items-center">
+        {leftIcon ? (
+          <Image src={leftIcon} alt="" className={`mr-4 ${iconStyle}`} />
+        ) : null}
         <div className={`${getTextStyle(type)} text-center ${textStyle}`}>
           {children}
         </div>
-        {rightIcon ? <Image src={rightIcon} alt="" className="ml-4" /> : null}
+        {rightIcon ? (
+          <Image src={rightIcon} alt="" className={`ml-4 ${iconStyle}`} />
+        ) : null}
       </div>
     </button>
   );

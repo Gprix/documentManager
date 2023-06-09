@@ -9,7 +9,12 @@ module.exports = {
     extend: {
       colors: {
         primary: "hsla(341, 100%, 65%, 1)",
+        error: "hsla(0, 66%, 64%, 1)",
         dimmed: "hsla(0, 0%, 0%, 0.3)",
+        // text variants
+        label: "hsla(0, 0%, 0%, 0.7)",
+        placeholder: "hsla(0, 0%, 0%, 0.25)",
+        // backdrop variants
         glass: "hsla(0, 0%, 100%, 0.1)",
         focus: "hsla(0, 0%, 0%, 0.35)",
       },
