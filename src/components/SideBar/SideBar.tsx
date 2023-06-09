@@ -10,9 +10,15 @@ import NotificationsSVG from "../../../public/images/icons/notifications.svg";
 import Link from "next/link";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { SideBarProps } from "./SideBar.types";
+import { useAuth } from "@/contexts/auth/auth.context.hooks";
+import { useEffect, useState } from "react";
+import { getMember } from "@/services/member/member.service";
+import { Member } from "@/services/member/member.service.types";
 
 const SideBar = (props: SideBarProps) => {
   const { selectedWorkspace } = useWorkspace();
+  const { uid } = useAuth();
+  const [photoURL, setPhotoURL] = useState("");
 
   const handleToggleInteractiveButton = () => {
     console.log("toggle interactive button");
@@ -22,7 +28,7 @@ const SideBar = (props: SideBarProps) => {
     return (
       <div className="flex flex-col items-center">
         <Image
-          src="https://picsum.photos/64"
+          src={photoURL}
           width="64"
           height="64"
           className="rounded-full"
@@ -32,6 +38,19 @@ const SideBar = (props: SideBarProps) => {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (!uid) return;
+
+    const retrieveUserInfo = async () => {
+      const member = await getMember(uid ?? "");
+      const { photoURL } = (member as Member) ?? {};
+
+      setPhotoURL(photoURL);
+    };
+
+    retrieveUserInfo();
+  }, []);
 
   return (
     <aside className="Sidebar min-w-[144px]">
