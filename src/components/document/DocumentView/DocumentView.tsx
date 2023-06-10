@@ -8,7 +8,7 @@ import { Paper } from "../Paper/Paper";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
-  const { documentId } = props;
+  // const { documentId } = props;
 
   return (
     <section className={`DocumentView ${className}`}>

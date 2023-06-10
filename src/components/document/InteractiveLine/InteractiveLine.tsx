@@ -11,7 +11,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
   (props, ref) => {
     const { className = "" } = props;
     const [nodes, setNodes] = useState<React.ReactNode[]>([]);
-    const [nodesRawData, setNodesRawData] = useState<any[]>();
+    const [_nodesRawData, setNodesRawData] = useState<any[]>();
 
     const secondaryMenuOptions = [
       {
