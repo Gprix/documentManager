@@ -33,7 +33,7 @@ export const TextNode = (props: TextNodeProps) => {
       <BaseNode className={`TextNode flex pl-2 pr-3 pt-1 ${className}`}>
         <button
           onClick={(e) => changeStyleHandler(e)}
-          className="text-sm mr-2 bg-transparent hover:bg-gray-100 hover:cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity rounded-lg px-2 pt-1 mb-1 text-gray-500"
+          className="text-sm mr-2 bg-transparent hover:bg-gray-100 hover:cursor-pointer w-0 opacity-0 group-hover:opacity-100 group-hover:w-auto transition-opacity rounded-lg px-2 pt-1 mb-1 text-gray-500"
         >
           {nodeStyle}
         </button>

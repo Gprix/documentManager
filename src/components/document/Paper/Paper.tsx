@@ -1,12 +1,12 @@
+"use client";
+
 import { PaperProps } from "./Paper.types";
-import { InteractiveLine } from "../InteractiveLine/InteractiveLine";
+import InteractiveLine from "../InteractiveLine/InteractiveLine";
 import { useState } from "react";
 
 export const Paper = (props: PaperProps) => {
   const { className = "" } = props;
   const [lines, setLines] = useState<React.ReactNode[]>([]);
-
-  console.log({ lines });
 
   const AddLine = () => {
     return (
@@ -26,7 +26,7 @@ export const Paper = (props: PaperProps) => {
 
   return (
     <article
-      className={`Paper flex flex-col gap-y-2 bg-white p-6 rounded-lg ${className}`}
+      className={`Paper flex flex-col gap-y-2 bg p-6 rounded-lg ${className}`}
     >
       {lines.map((line) => line)}
       <AddLine />

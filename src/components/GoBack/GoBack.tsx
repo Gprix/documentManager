@@ -10,7 +10,7 @@ const GoBack = (props: GoBackProps) => {
   const { back } = useRouter();
 
   return (
-    <div className="flex flex-nowrap place-items-center max-h-6">
+    <div className="GoBack flex flex-nowrap place-items-center max-h-6 hover:cursor-pointer">
       <Image src={LeftArrowSVG} alt="go back" onClick={() => back()} />
       <p className="ml-4 text-lg font-medium">{label}</p>
     </div>
