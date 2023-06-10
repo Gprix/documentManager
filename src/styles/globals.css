@@ -76,6 +76,10 @@ body {
   }
 
   .no-focus-outline {
+<<<<<<< HEAD
     @apply focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0;
+=======
+    @apply focus:border-none focus:outline-none focus:ring-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-0;
+>>>>>>> 0a3ce63c1fe77d4775b85272bcfe24da10d956ba
   }
 }
