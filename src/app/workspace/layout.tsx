@@ -12,8 +12,9 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
   const { selectedWorkspace, setSelectedWorkspace } = useWorkspace();
   const [peekComponents, setPeekComponents] = useState<React.ReactNode[]>([]);
   const selectedWorkspaceFromLocalStorage = useMemo(() => {
-    if (!localStorage) return;
-    return localStorage.getItem("SELECTED_WORKSPACE");
+    if (typeof window !== "undefined" && window.localStorage) {
+      return window.localStorage.getItem("SELECTED_WORKSPACE");
+    }
   }, []);
 
   const sidebarRef = useRef<HTMLDivElement>(null);

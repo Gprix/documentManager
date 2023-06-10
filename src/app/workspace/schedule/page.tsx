@@ -14,9 +14,12 @@ const SchedulePage = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("key");
-    if (storedData) {
-      setData(JSON.parse(storedData));
+    if (typeof window !== "undefined" && window.localStorage) {
+      const storedData = window.localStorage.getItem("key");
+
+      if (storedData) {
+        setData(JSON.parse(storedData));
+      }
     }
   }, []);
 
