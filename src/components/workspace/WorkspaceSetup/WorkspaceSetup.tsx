@@ -1,7 +1,6 @@
 "use client";
 
 import { WorkspaceSetupProps } from "./WorkspaceSetup.types";
-import Modal from "@/components/shared/Modal/Modal";
 import PatternIMG from "../../../../public/images/auth/pattern.png";
 import Image from "next/image";
 import Button from "@/components/shared/Button/Button";
@@ -10,13 +9,19 @@ import { useRouter } from "next/navigation";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { Workspace } from "@/contexts/workspace/workspace.context.types";
 import { writeWorkspace } from "@/services/workspace/workspace.service";
+import { useLayoutEffect } from "react";
+import { useAuth } from "@/contexts/auth/auth.context.hooks";
 
 const WorkspaceSetup = (props: WorkspaceSetupProps) => {
   const { push } = useRouter();
-  const { workspaces, setSelectedWorkspace, getWorkspaces } = useWorkspace();
+  const { uid } = useAuth();
+  const { workspaces, getWorkspaces } = useWorkspace();
+  const { setSelectedWorkspace } = useWorkspace();
 
   const handleSelectWorkspace = (workspace: Workspace) => {
+    const { uid } = workspace;
     setSelectedWorkspace(workspace);
+    localStorage.setItem("SELECTED_WORKSPACE", uid);
     push("/workspace/documents/");
   };
 
@@ -28,6 +33,15 @@ const WorkspaceSetup = (props: WorkspaceSetupProps) => {
     getWorkspaces();
   };
 
+  useLayoutEffect(() => {
+    setSelectedWorkspace(undefined);
+  }, [setSelectedWorkspace]);
+
+  useLayoutEffect(() => {
+    if (!uid) return;
+    getWorkspaces();
+  }, [getWorkspaces, uid]);
+
   const renderWorkspaceList = () => {
     return (
       <section className="px-12">
@@ -37,7 +51,7 @@ const WorkspaceSetup = (props: WorkspaceSetupProps) => {
         <ul className="columns-2">
           {workspaces.map((workspace) => (
             <li
-              key={workspace.id}
+              key={workspace.uid}
               className="underline font-medium text-primary mb-3 hover:cursor-pointer"
               onClick={() => handleSelectWorkspace(workspace)}
             >
@@ -50,11 +64,11 @@ const WorkspaceSetup = (props: WorkspaceSetupProps) => {
   };
 
   return (
-    <Modal type="unboxed" backdrop="glass" className="centered-relative">
+    <div className="w-full h-screen flex flex-col justify-center items-center z-10">
       <GAccountDropdown className="pb-6 mx-auto" />
-      <div className="bg-white rounded-2xl pb-6 overflow-clip">
+      <div className="bg-white rounded-2xl pb-6 overflow-clip w-[566px]">
         <Image src={PatternIMG} alt="" className="" />
-        {workspaces && workspaces.length ? renderWorkspaceList() : null}
+        {workspaces ? renderWorkspaceList() : null}
         <Button
           className="mx-auto mt-6"
           onClick={() => handleCreateWorkspace()}
@@ -65,7 +79,7 @@ const WorkspaceSetup = (props: WorkspaceSetupProps) => {
           Unirse a un espacio de trabajo
         </Button>
       </div>
-    </Modal>
+    </div>
   );
 };
 

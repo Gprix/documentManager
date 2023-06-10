@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BackdropStyle, BackdropProps, ModalProps } from "./Modal.types";
 
 export const Backdrop = (props: BackdropProps) => {
@@ -6,8 +7,8 @@ export const Backdrop = (props: BackdropProps) => {
 
   const backdropStyle = (style: BackdropStyle) =>
     ({
-      glass: "bg-glass backdrop-blur",
-      dark: "bg-focus",
+      glass: "bg-glass backdrop-blur hover:cursor-pointer",
+      dark: "bg-focus hover:cursor-pointer",
       none: "bg-transparent",
     }[style]);
 
@@ -21,24 +22,24 @@ export const Backdrop = (props: BackdropProps) => {
   );
 };
 
-const Modal = (props: ModalProps) => {
+export const Modal = (props: ModalProps) => {
   const { children, className = "" } = props;
   const { backdrop = "dark", type = "boxed" } = props;
+  const { onClose /*onBackdropClick*/ } = props;
+  const [_mouseIsOutside, setMouseIsOutside] = useState(false);
 
   const boxStyle = type == "boxed" ? "bg-white rounded-2xl" : "";
 
   return (
     <>
-      <Backdrop backdrop={backdrop} />
-      <div className="Modal__container z-50 absolute full-screen top-0 left-0">
-        <div
-          className={`Modal ${boxStyle} m-auto inline-block overflow-clip ${className}`}
-        >
-          {children}
-        </div>
+      <Backdrop backdrop={backdrop} onClick={() => onClose()} />
+      <div
+        className={`Modal ${boxStyle} absolute z-50 m-auto inline-block overflow-clip ${className}`}
+        onMouseEnter={() => setMouseIsOutside(false)}
+        onMouseLeave={() => setMouseIsOutside(true)}
+      >
+        {children}
       </div>
     </>
   );
 };
-
-export default Modal;

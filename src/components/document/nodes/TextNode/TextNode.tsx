@@ -59,7 +59,7 @@ export const TextNode = (props: TextNodeProps) => {
               };
 
               return (
-                <li>
+                <li key={name}>
                   <button
                     className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
                     onClick={() => actionHandler()}

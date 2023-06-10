@@ -5,6 +5,8 @@ export interface ModalProps {
   className?: string;
   backdrop?: BackdropStyle;
   type?: "boxed" | "unboxed";
+  onClose: () => void;
+  onBackdropClick?: () => void;
 }
 
 export interface BackdropProps {

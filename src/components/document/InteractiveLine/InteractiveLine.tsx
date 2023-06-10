@@ -13,20 +13,32 @@ export const InteractiveLine = (props: InteractiveLineProps) => {
   const secondaryMenuOptions = [
     {
       name: "Nodo de texto",
-      action: () => setNodes((prevNodes) => [...prevNodes, <TextNode />]),
+      action: () =>
+        setNodes((prevNodes) => [...prevNodes, <TextNode key="option-text" />]),
     },
     {
       name: "Insertar bloque de texto",
-      action: () => setNodes((prevNodes) => [...prevNodes, <TextBlockNode />]),
+      action: () =>
+        setNodes((prevNodes) => [
+          ...prevNodes,
+          <TextBlockNode key="option-text-block" />,
+        ]),
     },
     {
       name: "Entrada de texto",
-      action: () => setNodes((prevNodes) => [...prevNodes, <TextInputNode />]),
+      action: () =>
+        setNodes((prevNodes) => [
+          ...prevNodes,
+          <TextInputNode key="option-text-input" />,
+        ]),
     },
     {
       name: "Entrada de número",
       action: () =>
-        setNodes((prevNodes) => [...prevNodes, <NumberInputNode />]),
+        setNodes((prevNodes) => [
+          ...prevNodes,
+          <NumberInputNode key="option-number-input" />,
+        ]),
     },
   ];
 
@@ -61,7 +73,7 @@ export const InteractiveLine = (props: InteractiveLineProps) => {
                 const { name, action } = option;
 
                 return (
-                  <li>
+                  <li key={name}>
                     <button
                       className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
                       onClick={action}
