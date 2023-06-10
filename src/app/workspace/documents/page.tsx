@@ -29,6 +29,8 @@ const DocumentsPage = () => {
       <div className="flex flex-col gap-y-2 bg-white p-6 rounded-lg">
         <InteractiveLine />
         <InteractiveLine />
+        <InteractiveLine />
+        <InteractiveLine />
       </div>
       <RecentDocuments />
       <Archive />

@@ -8,4 +8,4 @@ export interface TextNodeProps {
   className?: string;
 }
 
-export type TextTypes = "h1" | "h2" | "h3" | "span" | "longText" | "p";
+export type TextType = "h1" | "h2" | "h3" | "span" | "longText" | "p";

@@ -42,9 +42,9 @@ export const getCurrentUserWorkspaces = async () => {
 
     const querySnapshot = await getDocs(q);
 
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
+    // querySnapshot.forEach((doc) => {
+    //   console.log(doc.id, " => ", doc.data());
+    // });
 
     const workspacesData = querySnapshot.docs.map((doc) => ({
       ...doc.data(),

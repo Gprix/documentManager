@@ -1,22 +1,24 @@
-import { Backdrop, BackdropProps, ModalProps } from "./Modal.types";
+import { BackdropStyle, BackdropProps, ModalProps } from "./Modal.types";
 
-const Backdrop = (props: BackdropProps) => {
+export const Backdrop = (props: BackdropProps) => {
   const { backdrop = "dark" } = props;
+  const { onClick } = props;
 
-  const backdropStyle = (style: Backdrop) =>
+  const backdropStyle = (style: BackdropStyle) =>
     ({
-      glass: "bg-glass",
+      glass: "bg-glass backdrop-blur",
       dark: "bg-focus",
       none: "bg-transparent",
     }[style]);
 
-  return backdrop !== "none" ? (
+  return (
     <div
+      onClick={onClick}
       className={`Backdrop ${backdropStyle(
         backdrop
-      )} backdrop-blur z-40 full-screen overflow-hidden absolute top-0 left-0`}
+      )} z-40 full-screen overflow-hidden absolute top-0 left-0`}
     />
-  ) : null;
+  );
 };
 
 const Modal = (props: ModalProps) => {
