@@ -1,7 +1,5 @@
 "use client";
 
-import { InteractiveLine } from "@/components/document/InteractiveLine/InteractiveLine";
-
 const RecentDocuments = () => {
   return (
     <section>
@@ -25,13 +23,6 @@ const DocumentsPage = () => {
     <section className="Documents flex-grow bg-blue-100 text-black">
       <h1 className="Documents__title">Documentos</h1>
       <input type="text" className="Documents__search" />
-      {/* FAKE PAPER */}
-      <div className="flex flex-col gap-y-2 bg-white p-6 rounded-lg">
-        <InteractiveLine />
-        <InteractiveLine />
-        <InteractiveLine />
-        <InteractiveLine />
-      </div>
       <RecentDocuments />
       <Archive />
     </section>
