@@ -26,11 +26,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+/* TODO: Evaluar si todo esto es necesario */
 @layer components {
+  /* Home */
   .Home__list-item {
     @apply -tracking-[0.005em] my-12;
   }
 
+  /* Sidebar */
   .Sidebar {
     @apply bg-primary h-full w-[10%] flex flex-col justify-between items-center pb-8 pt-4 px-2;
   }
@@ -43,8 +46,9 @@ body {
     @apply rounded-full px-4 py-2 bg-black text-white mx-auto;
   }
 
+  /* Documents */
   .Documents {
-    @apply pt-4 pl-4;
+    @apply p-4;
   }
 
   .Documents__title {
@@ -68,6 +72,6 @@ body {
   }
 
   .no-focus-outline {
-    @apply focus:border-none focus:outline-none focus:ring-0 focus-visible:border-none focus-visible:outline-none focus-visible:ring-0;
+    @apply focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0;
   }
 }
