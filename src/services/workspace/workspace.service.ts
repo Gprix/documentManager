@@ -1,5 +1,5 @@
 import { db, auth } from "@/config/firebase.config";
-import { doc, where, query, setDoc } from "firebase/firestore";
+import { doc, where, query, setDoc, getDoc } from "firebase/firestore";
 import { getDocs, collection } from "firebase/firestore";
 import { WriteWorkspacePayload } from "./workspace.service.types";
 
@@ -8,12 +8,27 @@ export const writeWorkspace = async (payload: WriteWorkspacePayload) => {
     const user = auth.currentUser;
     if (!user) throw new Error("User not authenticated");
 
-    await setDoc(doc(db, "workspaces", crypto.randomUUID()), {
+    const uid = crypto.randomUUID();
+    await setDoc(doc(db, "workspaces", uid), {
       ...payload,
+      uid,
       ownerUid: user.uid,
     });
   } catch (e) {
     console.error(e);
+  }
+};
+
+export const getWorkspace = async (uid: string) => {
+  try {
+    const docRef = doc(db, "workspaces", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -42,9 +57,9 @@ export const getCurrentUserWorkspaces = async () => {
 
     const querySnapshot = await getDocs(q);
 
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
+    // querySnapshot.forEach((doc) => {
+    //   console.log(doc.id, " => ", doc.data());
+    // });
 
     const workspacesData = querySnapshot.docs.map((doc) => ({
       ...doc.data(),

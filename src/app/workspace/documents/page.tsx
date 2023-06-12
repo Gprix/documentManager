@@ -20,7 +20,7 @@ const Archive = () => {
 
 const DocumentsPage = () => {
   return (
-    <section className="Documents">
+    <section className="Documents flex-grow bg-blue-100 text-black">
       <h1 className="Documents__title">Documentos</h1>
       <input type="text" className="Documents__search" />
       <RecentDocuments />

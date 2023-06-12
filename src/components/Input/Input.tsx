@@ -10,7 +10,7 @@ const Input = (props: InputProps) => {
   const { id, label, required } = props;
   const { withSubmit = false, onSubmit } = props;
   const [inputValue, setInputValue] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage] = useState("");
 
   const labelStyle = inputValue
     ? "text-label text-sm bottom-10"
