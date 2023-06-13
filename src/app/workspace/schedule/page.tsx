@@ -9,14 +9,17 @@ const SchedulePage = () => {
     date: "",
     location: "",
   });
-  const [data, setData] = useState([]);
+  const [_data, setData] = useState([]);
 
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("key");
-    if (storedData) {
-      setData(JSON.parse(storedData));
+    if (typeof window !== "undefined" && window.localStorage) {
+      const storedData = window.localStorage.getItem("key");
+
+      if (storedData) {
+        setData(JSON.parse(storedData));
+      }
     }
   }, []);
 
@@ -26,16 +29,19 @@ const SchedulePage = () => {
   };
 
   const handleChangeForm = (e: Object) => {
+    // @ts-ignore
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: Object) => {
+    // @ts-ignore
     e.preventDefault();
     // Save eventData to local storage
     const newEvents = [...events, eventData];
     localStorage.setItem("events", JSON.stringify(newEvents));
     // Reset the form
     setEventData({ name: "", date: "", location: "" });
+    // @ts-ignore
     setEvents(newEvents);
     setModal(false);
   };
@@ -75,6 +81,7 @@ const SchedulePage = () => {
               <input
                 type="text"
                 name="name"
+                // @ts-ignore
                 value={eventData.name}
                 onChange={handleChangeForm}
               />
@@ -84,6 +91,7 @@ const SchedulePage = () => {
               <input
                 type="date"
                 name="date"
+                // @ts-ignore
                 value={eventData.date}
                 onChange={handleChangeForm}
               />
@@ -93,6 +101,7 @@ const SchedulePage = () => {
               <input
                 type="text"
                 name="location"
+                // @ts-ignore
                 value={eventData.location}
                 onChange={handleChangeForm}
               />
@@ -123,7 +132,12 @@ const SchedulePage = () => {
         >
           <div className="flex justify-center text-2xl font-semibold center mt-5">
             {date.toLocaleDateString() === new Date().toLocaleDateString() ? (
-              <div key={date.toLocaleDateString()} className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-[#FAFAFA] text-l">{date.getDate()}</div>
+              <div
+                key={date.toLocaleDateString()}
+                className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-[#FAFAFA] text-l"
+              >
+                {date.getDate()}
+              </div>
             ) : (
               date.getDate()
             )}
