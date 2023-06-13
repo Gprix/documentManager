@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface Workspace {
-  id: string;
+  uid: string;
   name: string;
+  ownerUid: string;
 }
 
 export interface WorkspaceContextProviderProps {
