@@ -1,7 +1,8 @@
-import { DocumentRawData } from "@/types/document.types";
+import { Document } from "@/types/document.types";
 
-export interface WriteDocumentPayload {
-  title: string;
-  workspaceId: string;
-  documentData: DocumentRawData;
-}
+/**
+ * Payload for writing a document to the database
+ *
+ * @interface WriteDocumentPayload
+ */
+export interface WriteDocumentPayload extends Omit<Document, "uid"> {}

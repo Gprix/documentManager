@@ -1,5 +1,5 @@
 import { auth, db } from "@/config/firebase.config";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { WriteDocumentPayload } from "./document.services.types";
 
 export const writeDocument = async (payload: WriteDocumentPayload) => {
@@ -13,7 +13,16 @@ export const writeDocument = async (payload: WriteDocumentPayload) => {
       uid,
       authorId: user.uid,
     });
+
+    return uid;
   } catch (e) {
     console.error(e);
   }
+};
+
+export const getDocument = async (uid: string) => {
+  const docRef = doc(db, "documents", uid);
+  const docSnap = await getDoc(docRef);
+
+  return docSnap.data();
 };

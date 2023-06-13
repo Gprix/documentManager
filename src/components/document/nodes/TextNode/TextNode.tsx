@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useLayoutEffect, useState } from "react";
 import { BaseNode } from "../BaseNode/BaseNode";
 import { TextNodeProps } from "./TextNode.types";
 import { SecondaryMenu } from "@/components/shared/SecondaryMenu/SecondaryMenu";
@@ -8,9 +8,11 @@ import { TextType } from "./TextNode.types";
 
 export const TextNode = (props: TextNodeProps) => {
   const { className = "" } = props;
+  const { data, rowIndex } = props;
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
   const [nodeStyle, setNodeStyle] = useState<TextType>("h1");
+  const [value, setValue] = useState("");
 
   const secondaryMenuOptions = [
     {
@@ -28,6 +30,14 @@ export const TextNode = (props: TextNodeProps) => {
     setShowSecondaryMenu(true);
   };
 
+  useLayoutEffect(() => {
+    if (!data) return;
+
+    const { style, value } = data;
+    setNodeStyle(style);
+    setValue(value);
+  }, [data]);
+
   return (
     <>
       <BaseNode className={`TextNode flex pl-2 pr-3 pt-1 ${className}`}>
@@ -38,6 +48,8 @@ export const TextNode = (props: TextNodeProps) => {
           {nodeStyle}
         </button>
         <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
           type="text"
           placeholder="Lorem ipsum..."
           className="font-light text-black text-sm no-focus-outline w-full bg-transparent border-b border-black mb-1"

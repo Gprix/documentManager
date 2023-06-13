@@ -28,7 +28,7 @@ body {
 
   /* Sidebar */
   .Sidebar {
-    @apply bg-primary h-full w-[10%] flex flex-col justify-between items-center pb-8 pt-4 px-2;
+    @apply h-full w-[10%] flex flex-col justify-between items-center pb-8 pt-4 px-2;
   }
 
   .Sidebar__element {

@@ -13,15 +13,14 @@ export const TemplatesList = (props: TemplateListProps) => {
   const buttonHandler = async () => {
     if (!selectedWorkspace) return;
 
-    await writeDocument({
-      title: `Rectificación de partida ${Date.now().toString()}`,
+    const newDocument = await writeDocument({
+      title: `Doc-${Date.now().toString()}`,
       workspaceId: selectedWorkspace.uid,
-      documentData: {
-        documentRows: [],
-      },
+      documentData: null,
     });
 
-    push("/workspace/workshop/1");
+    if (!newDocument) return;
+    push(`/workspace/workshop/${newDocument}`);
   };
 
   return (

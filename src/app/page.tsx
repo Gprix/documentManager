@@ -29,7 +29,7 @@ const HomePage = () => {
         alt=""
         className="absolute left-0 right-0 bottom-0 w-full pointer-events-none"
       />
-      <div className="relative flex max-w-[1440px]">
+      <div className="relative flex max-w-[1440px] mx-auto">
         <div className="w-1/2 z-10 flex flex-col justify-center items-center">
           <Image src={DocsSVG} alt="" className="p-16" />
         </div>

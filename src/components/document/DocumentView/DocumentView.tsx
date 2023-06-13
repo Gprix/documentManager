@@ -5,6 +5,8 @@ import { DocumentViewProps } from "./DocumentView.types";
 import Button from "@/components/shared/Button/Button";
 import RightArrowWhiteSVG from "../../../../public/images/icons/right-arrow-white.svg";
 import { Paper } from "../Paper/Paper";
+import { useLayoutEffect } from "react";
+import { getDocument } from "@/services/document/document.service";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;

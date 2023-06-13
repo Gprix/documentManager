@@ -2,27 +2,45 @@
 
 import { PaperProps } from "./Paper.types";
 import InteractiveLine from "../InteractiveLine/InteractiveLine";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
+import { DocumentLineRawData } from "@/types/document.types";
 
 export const Paper = (props: PaperProps) => {
   const { className = "" } = props;
+  const { document } = props;
+  const { documentData } = document ?? {};
+  const { documentLines } = documentData ?? {};
   const [lines, setLines] = useState<React.ReactNode[]>([]);
+
+  const bindLine = (lineData: DocumentLineRawData | undefined) => {
+    setLines((prevLines) => [
+      ...prevLines,
+      <InteractiveLine
+        orderIndex={prevLines.length}
+        data={lineData}
+        key={`line-${prevLines.length}`}
+      />,
+    ]);
+  };
 
   const AddLine = () => {
     return (
       <button
-        onClick={() =>
-          setLines((prevLines) => [
-            ...prevLines,
-            <InteractiveLine key={`line-${prevLines.length}`} />,
-          ])
-        }
-        className="bg-gray-200 text-transparent hover:text-black rounded-lg hover:cursor-pointer px-4 min-h-[32px] transition-color duration-150"
+        onClick={() => bindLine(undefined)}
+        className="bg-gray-200 hover:bg-gray-300 text-black rounded-lg hover:cursor-pointer px-4 min-h-[32px] transition-color duration-150"
       >
         +
       </button>
     );
   };
+
+  useLayoutEffect(() => {
+    if (!documentLines) return;
+
+    documentLines?.map((line) => {
+      bindLine(line);
+    });
+  }, [documentLines]);
 
   return (
     <article
