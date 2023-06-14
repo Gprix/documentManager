@@ -8,19 +8,35 @@ import { TextType } from "./TextNode.types";
 
 export const TextNode = (props: TextNodeProps) => {
   const { className = "" } = props;
-  const { data, rowIndex } = props;
+  const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
-  const [nodeStyle, setNodeStyle] = useState<TextType>("h1");
+  const [nodeStyle, setNodeStyle] = useState<TextType>("span");
   const [value, setValue] = useState("");
 
   const secondaryMenuOptions = [
     {
-      name: "(h1) Título",
+      name: "Título",
       action: () => setNodeStyle("h1"),
     },
     {
-      name: "(p) Párrafo",
+      name: "Subtítulo",
+      action: () => setNodeStyle("h2"),
+    },
+    {
+      name: "Sección",
+      action: () => setNodeStyle("h3"),
+    },
+    {
+      name: "Texto",
+      action: () => setNodeStyle("span"),
+    },
+    {
+      name: "Texto largo",
+      action: () => setNodeStyle("longText"),
+    },
+    {
+      name: "Párrafo",
       action: () => setNodeStyle("p"),
     },
   ];
@@ -30,6 +46,7 @@ export const TextNode = (props: TextNodeProps) => {
     setShowSecondaryMenu(true);
   };
 
+  // Retrieve and set data
   useLayoutEffect(() => {
     if (!data) return;
 
@@ -37,6 +54,22 @@ export const TextNode = (props: TextNodeProps) => {
     setNodeStyle(style);
     setValue(value);
   }, [data]);
+
+  const handleUpdate = () => {
+    if (!onNodeUpdate) return;
+
+    onNodeUpdate(
+      {
+        inlineIndex,
+        rowIndex,
+        isFullLine: false,
+        type: "text",
+        style: nodeStyle,
+        value,
+      },
+      { inlineIndex, rowIndex }
+    );
+  };
 
   return (
     <>
@@ -49,7 +82,10 @@ export const TextNode = (props: TextNodeProps) => {
         </button>
         <input
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            handleUpdate();
+          }}
           type="text"
           placeholder="Lorem ipsum..."
           className="font-light text-black text-sm no-focus-outline w-full bg-transparent border-b border-black mb-1"

@@ -2,6 +2,28 @@ import { auth, db } from "@/config/firebase.config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { WriteDocumentPayload } from "./document.services.types";
 
+export const updateDocument = async (
+  uid: string,
+  payload: WriteDocumentPayload
+) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not authenticated");
+
+    const { documentData } = payload;
+    if (documentData === null) return;
+
+    const flattenedDocumentData = JSON.stringify(documentData);
+
+    await setDoc(doc(db, "documents", uid), {
+      ...payload,
+      documentData: flattenedDocumentData,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const writeDocument = async (payload: WriteDocumentPayload) => {
   try {
     const user = auth.currentUser;
@@ -16,13 +38,16 @@ export const writeDocument = async (payload: WriteDocumentPayload) => {
 
     return uid;
   } catch (e) {
-    console.error(e);
+    console.log(e);
   }
 };
 
 export const getDocument = async (uid: string) => {
-  const docRef = doc(db, "documents", uid);
-  const docSnap = await getDoc(docRef);
-
-  return docSnap.data();
+  try {
+    const docRef = doc(db, "documents", uid);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  } catch (e) {
+    console.log(e);
+  }
 };

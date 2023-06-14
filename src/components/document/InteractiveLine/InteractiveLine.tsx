@@ -3,6 +3,7 @@ import {
   forwardRef,
   useCallback,
   useLayoutEffect,
+  useMemo,
   useState,
 } from "react";
 import { AddNodeProps, InteractiveLineProps } from "./InteractiveLine.types";
@@ -23,19 +24,23 @@ import {
 const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
   (props, ref) => {
     const { className = "" } = props;
-    const { data, orderIndex } = props;
+    const { data, orderIndex, onNodeUpdate } = props;
     const [nodes, setNodes] = useState<React.ReactNode[]>([]);
 
     const bindNode = useCallback(
       (nodeData: DocumentNodeRawData | undefined, actionType?: NodeTypes) => {
         const { type, rowIndex, inlineIndex } = nodeData ?? {};
 
-        switch (type ?? actionType) {
+        const selector = type ?? actionType;
+
+        switch (selector) {
           case "text":
             setNodes((prevNodes) => [
               ...prevNodes,
               <TextNode
-                rowIndex={!!type ? rowIndex : orderIndex}
+                onNodeUpdate={onNodeUpdate}
+                inlineIndex={inlineIndex ?? prevNodes.length}
+                rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextNodeRawData}
                 key={`text-node-${inlineIndex}-${rowIndex}`}
               />,
@@ -46,7 +51,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             setNodes((prevNodes) => [
               ...prevNodes,
               <TextBlockNode
-                rowIndex={!!type ? rowIndex : orderIndex}
+                rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextBlockNodeRawData}
                 key={`text-block-node-${inlineIndex}-${rowIndex}`}
               />,
@@ -57,7 +62,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             setNodes((prevNodes) => [
               ...prevNodes,
               <TextInputNode
-                rowIndex={!!type ? rowIndex : orderIndex}
+                rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextInputNodeRawData}
                 key={`text-input-node-${inlineIndex}-${rowIndex}`}
               />,
@@ -68,7 +73,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             setNodes((prevNodes) => [
               ...prevNodes,
               <NumberInputNode
-                rowIndex={!!type ? rowIndex : orderIndex}
+                rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as NumberInputNodeRawData}
                 key={`number-input-node-${inlineIndex}-${rowIndex}`}
               />,
@@ -76,7 +81,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             break;
         }
       },
-      [orderIndex]
+      [onNodeUpdate, orderIndex]
     );
 
     useLayoutEffect(() => {
@@ -110,6 +115,9 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
       const { disabled = false } = props;
       const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
       const [origin, setOrigin] = useState({ x: 0, y: 0 });
+      const isCursorPastMiddle = useMemo(() => {
+        return origin.x > window.innerWidth / 2;
+      }, [origin]);
 
       const disabledStyle = disabled
         ? "opacity-30 hover:cursor-not-allowed"
@@ -129,28 +137,31 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             +
           </button>
           {showSecondaryMenu ? (
-            <SecondaryMenu
-              top={origin.y}
-              left={origin.x}
-              onDismiss={() => setShowSecondaryMenu(false)}
-            >
-              <ul role="listbox">
-                {secondaryMenuOptions.map((option) => {
-                  const { name, actionType } = option;
+            <div ref={ref}>
+              <SecondaryMenu
+                top={origin.y}
+                // TODO: find a way to calculate the width of the menu
+                left={!isCursorPastMiddle ? origin.x : origin.x - 205}
+                onDismiss={() => setShowSecondaryMenu(false)}
+              >
+                <ul role="listbox">
+                  {secondaryMenuOptions.map((option) => {
+                    const { name, actionType } = option;
 
-                  return (
-                    <li key={name}>
-                      <button
-                        className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
-                        onClick={() => bindNode(undefined, actionType)}
-                      >
-                        {name}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </SecondaryMenu>
+                    return (
+                      <li key={name}>
+                        <button
+                          className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
+                          onClick={() => bindNode(undefined, actionType)}
+                        >
+                          {name}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </SecondaryMenu>
+            </div>
           ) : null}
         </>
       );

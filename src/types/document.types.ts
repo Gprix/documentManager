@@ -13,6 +13,11 @@ export interface DocumentRawData {
 
 export type DocumentLineRawData = DocumentNodeRawData[];
 
+export type DocumentLineRawDataPosition = {
+  rowIndex: number;
+  inlineIndex: number;
+};
+
 export type DocumentNodeRawData =
   | TextBlockNodeRawData
   | TextInputNodeRawData
@@ -23,8 +28,8 @@ export type DocumentNodeRawData =
 export type NodeTypes = "text" | "textInput" | "numberInput" | "textBlock";
 
 export interface NodeRawData {
-  inlineIndex: number;
   rowIndex: number;
+  inlineIndex: number;
   isFullLine: boolean;
   type: NodeTypes;
 }

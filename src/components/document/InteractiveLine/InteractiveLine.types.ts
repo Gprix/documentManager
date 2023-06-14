@@ -1,4 +1,8 @@
-import { DocumentLineRawData } from "@/types/document.types";
+import {
+  DocumentLineRawData,
+  DocumentLineRawDataPosition,
+} from "@/types/document.types";
+import { DocumentNodeRawData } from "../../../types/document.types";
 
 /**
  * InteractiveLine component props.
@@ -7,6 +11,7 @@ import { DocumentLineRawData } from "@/types/document.types";
  * @param {string} className - Custom className.
  * @param {DocumentLineRawData[]} data - Line data.
  * @param {number} orderIndex - Line order index.
+ * @param {(node: DocumentNodeRawData, position: DocumentLineRawDataPosition) => void} onNodeUpdate - Callback function to update node data.
  */
 export interface InteractiveLineProps {
   /** Custom className. */
@@ -14,7 +19,12 @@ export interface InteractiveLineProps {
   /** Line data. */
   data?: DocumentLineRawData;
   /** Line order index. */
-  orderIndex?: number;
+  orderIndex: number;
+  /** Callback function to update node data. */
+  onNodeUpdate: (
+    node: DocumentNodeRawData,
+    position: DocumentLineRawDataPosition
+  ) => void;
 }
 
 /**
