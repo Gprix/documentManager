@@ -2,7 +2,7 @@
 
 import { PaperProps } from "./Paper.types";
 import InteractiveLine from "../InteractiveLine/InteractiveLine";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import {
   DocumentLineRawData,
   DocumentLineRawDataPosition,
@@ -17,7 +17,10 @@ export const Paper = (props: PaperProps) => {
   const { selectedDocument, setSelectedDocument } = useDocument();
   const { documentData } = document ?? {};
   const [lines, setLines] = useState<React.ReactNode[]>([]);
-
+  const isMounted = useRef(false);
+  /**
+   * Callback to handle node update
+   */
   const onNodeUpdate = useCallback(
     (
       updatedNodeData: DocumentNodeRawData,
@@ -56,11 +59,16 @@ export const Paper = (props: PaperProps) => {
         },
       };
 
+      console.log({ updatedNodeData });
+
       setSelectedDocument(newDocumentData);
     },
     [selectedDocument, setSelectedDocument]
   );
 
+  /**
+   * Callback to instance a new interactive line
+   */
   const bindLine = useCallback(
     (lineData: DocumentLineRawData | undefined) => {
       setLines((prevLines) => [
@@ -89,12 +97,17 @@ export const Paper = (props: PaperProps) => {
 
   // Map document data lines to node lines
   useLayoutEffect(() => {
+    if (isMounted.current) return;
+
     if (documentData === undefined || documentData === null) return;
+
     const { documentLines } = documentData;
 
     documentLines?.map((line) => {
       bindLine(line);
     });
+
+    isMounted.current = true;
   }, [bindLine, documentData]);
 
   return (

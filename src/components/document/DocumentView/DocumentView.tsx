@@ -18,6 +18,7 @@ export const DocumentView = (props: DocumentViewProps) => {
   const { documentId } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
   const { title } = selectedDocument ?? {};
+  const documentSnapshot = { ...selectedDocument };
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
@@ -71,7 +72,7 @@ export const DocumentView = (props: DocumentViewProps) => {
       {/* Document */}
       <div className="overflow-y-auto h-screen max-h-screen">
         <Paper
-          document={selectedDocument}
+          document={documentSnapshot as Document}
           className="bg-[#f9f9f9] rounded-none text-black mb-32"
         />
       </div>
