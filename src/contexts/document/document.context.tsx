@@ -13,10 +13,9 @@ export const DocumentContext = createContext<DocumentContextProviderValue>(
 export const DocumentProvider = (props: DocumentContextProviderProps) => {
   const [selectedDocument, setSelectedDocument] = useState<Document>();
 
-  const value: DocumentContextProviderValue = useMemo(
-    () => ({ selectedDocument, setSelectedDocument }),
-    [selectedDocument]
-  );
+  const value: DocumentContextProviderValue = useMemo(() => {
+    return { selectedDocument, setSelectedDocument };
+  }, [selectedDocument]);
 
   return (
     <DocumentContext.Provider value={value}>

@@ -16,7 +16,7 @@ export const TemplatesList = (props: TemplateListProps) => {
     const newDocument = await writeDocument({
       title: `Doc-${Date.now().toString()}`,
       workspaceId: selectedWorkspace.uid,
-      documentData: null,
+      documentData: [],
     });
 
     if (!newDocument) return;

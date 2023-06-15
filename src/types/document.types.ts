@@ -3,12 +3,9 @@ import { TextType } from "@/components/document/nodes/TextNode/TextNode.types";
 export interface Document {
   uid: string;
   title: string;
+  authorId: string;
   workspaceId: string;
-  documentData: DocumentRawData | null;
-}
-
-export interface DocumentRawData {
-  documentLines: DocumentLineRawData[];
+  documentData: NodeRawData[];
 }
 
 export type DocumentLineRawData = DocumentNodeRawData[];

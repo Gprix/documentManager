@@ -4,66 +4,73 @@ import { PaperProps } from "./Paper.types";
 import InteractiveLine from "../InteractiveLine/InteractiveLine";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import {
+  Document,
   DocumentLineRawData,
-  DocumentLineRawDataPosition,
   DocumentNodeRawData,
-  DocumentRawData,
 } from "@/types/document.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const Paper = (props: PaperProps) => {
   const { className = "" } = props;
   const { document } = props;
-  const { selectedDocument, setSelectedDocument } = useDocument();
-  const { documentData } = document ?? {};
+  const { setSelectedDocument } = useDocument();
+  const { documentData: documentDataProps } = document ?? {};
   const [lines, setLines] = useState<React.ReactNode[]>([]);
   const isMounted = useRef(false);
-  /**
-   * Callback to handle node update
-   */
+
   const onNodeUpdate = useCallback(
-    (
-      updatedNodeData: DocumentNodeRawData,
-      updatedNodePosition: DocumentLineRawDataPosition
-    ) => {
-      if (!selectedDocument) return;
+    (updatedNodeData: DocumentNodeRawData) => {
+      setSelectedDocument((prevDocument) => {
+        if (!prevDocument) return prevDocument;
+        const { documentData: oldDocumentData } = prevDocument;
+        if (oldDocumentData === undefined) return prevDocument;
 
-      const oldDocumentState = { ...selectedDocument };
-      const { documentData: oldDocumentData } = oldDocumentState ?? {};
+        const isFirstUpdate =
+          prevDocument.documentData.length === 0 &&
+          oldDocumentData.length === 0;
 
-      // initialize document (raw) data
-      if (oldDocumentData === null) {
-        const newDocumentData: DocumentRawData = {
-          documentLines: [],
+        if (isFirstUpdate) {
+          const newDocument: Document = {
+            ...prevDocument,
+            documentData: [updatedNodeData],
+          };
+          return newDocument;
+        }
+
+        const newDocumentData = [updatedNodeData];
+
+        const resultDocumentData = oldDocumentData
+          ? oldDocumentData
+              .map((node) => {
+                const { rowIndex, inlineIndex } = node;
+                const matchNode = newDocumentData.find(
+                  (item) =>
+                    item.rowIndex === rowIndex &&
+                    item.inlineIndex === inlineIndex
+                );
+                return matchNode || node;
+              })
+              .concat(
+                newDocumentData.filter(
+                  (item) =>
+                    !oldDocumentData.find(
+                      (node) =>
+                        item.rowIndex === node.rowIndex &&
+                        item.inlineIndex === node.inlineIndex
+                    )
+                )
+              )
+          : newDocumentData;
+
+        const newDocument: Document = {
+          ...prevDocument,
+          documentData: resultDocumentData,
         };
-        setSelectedDocument({
-          ...oldDocumentState,
-          documentData: newDocumentData,
-        });
-      }
 
-      const docLines = oldDocumentData?.documentLines ?? [];
-
-      const newDocumentData = {
-        ...oldDocumentState,
-        documentData: {
-          ...oldDocumentState.documentData,
-          documentLines: [
-            ...docLines,
-            [
-              {
-                ...updatedNodeData,
-              },
-            ],
-          ],
-        },
-      };
-
-      console.log({ updatedNodeData });
-
-      setSelectedDocument(newDocumentData);
+        return newDocument;
+      });
     },
-    [selectedDocument, setSelectedDocument]
+    [setSelectedDocument]
   );
 
   /**
@@ -95,20 +102,32 @@ export const Paper = (props: PaperProps) => {
     );
   };
 
-  // Map document data lines to node lines
+  // Map document data lines to node lines (initial render)
   useLayoutEffect(() => {
     if (isMounted.current) return;
 
-    if (documentData === undefined || documentData === null) return;
+    if (documentDataProps === undefined || documentDataProps === null) return;
 
-    const { documentLines } = documentData;
+    // for each object in documentData
+    // Object.values(documentData).forEach((line) => {
+    //   // for each object in line
+    //   Object.values(line).forEach((node) => {
+    //     // bind line
+    //     bindLine(node);
+    //   });
+    // });
 
-    documentLines?.map((line) => {
-      bindLine(line);
-    });
+    // const documentLines = Object.values(documentData);
+
+    // documentLines.forEach((line) => {
+    //   const nodes = Object.values(line);
+    //   nodes.forEach((node) => {
+    //     bindLine(node);
+    //   });
+    // });
 
     isMounted.current = true;
-  }, [bindLine, documentData]);
+  }, [bindLine, documentDataProps]);
 
   return (
     <article

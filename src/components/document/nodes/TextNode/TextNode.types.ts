@@ -1,8 +1,4 @@
-import {
-  DocumentLineRawDataPosition,
-  DocumentNodeRawData,
-  TextNodeRawData,
-} from "@/types/document.types";
+import { DocumentNodeRawData, TextNodeRawData } from "@/types/document.types";
 
 /**
  * TextNode component props.
@@ -24,10 +20,7 @@ export interface TextNodeProps {
   /** Node inline index. */
   inlineIndex: number;
   /** Callback function to update node data. */
-  onNodeUpdate: (
-    node: DocumentNodeRawData,
-    position: DocumentLineRawDataPosition
-  ) => void;
+  onNodeUpdate: (node: DocumentNodeRawData) => void;
 }
 
 export type TextType = "h1" | "h2" | "h3" | "span" | "longText" | "p";

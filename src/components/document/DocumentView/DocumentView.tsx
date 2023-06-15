@@ -18,7 +18,6 @@ export const DocumentView = (props: DocumentViewProps) => {
   const { documentId } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
   const { title } = selectedDocument ?? {};
-  const documentSnapshot = { ...selectedDocument };
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
@@ -33,12 +32,7 @@ export const DocumentView = (props: DocumentViewProps) => {
 
       if (!retrievedDocument) return;
 
-      const { documentData } = retrievedDocument;
-
-      setSelectedDocument({
-        ...retrievedDocument,
-        documentData: JSON.parse(documentData) ?? null,
-      } as Document);
+      setSelectedDocument(retrievedDocument as Document);
     };
     retrieveDocument();
 
@@ -71,10 +65,7 @@ export const DocumentView = (props: DocumentViewProps) => {
 
       {/* Document */}
       <div className="overflow-y-auto h-screen max-h-screen">
-        <Paper
-          document={documentSnapshot as Document}
-          className="bg-[#f9f9f9] rounded-none text-black mb-32"
-        />
+        <Paper className="bg-[#f9f9f9] rounded-none text-black mb-32" />
       </div>
     </section>
   );

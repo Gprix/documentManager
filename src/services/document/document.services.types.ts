@@ -5,4 +5,5 @@ import { Document } from "@/types/document.types";
  *
  * @interface WriteDocumentPayload
  */
-export interface WriteDocumentPayload extends Omit<Document, "uid"> {}
+export interface WriteDocumentPayload
+  extends Omit<Document, "uid" | "authorId"> {}

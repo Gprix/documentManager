@@ -1,7 +1,4 @@
-import {
-  DocumentLineRawData,
-  DocumentLineRawDataPosition,
-} from "@/types/document.types";
+import { DocumentLineRawData } from "@/types/document.types";
 import { DocumentNodeRawData } from "../../../types/document.types";
 
 /**
@@ -21,10 +18,7 @@ export interface InteractiveLineProps {
   /** Line order index. */
   orderIndex: number;
   /** Callback function to update node data. */
-  onNodeUpdate: (
-    node: DocumentNodeRawData,
-    position: DocumentLineRawDataPosition
-  ) => void;
+  onNodeUpdate: (node: DocumentNodeRawData) => void;
 }
 
 /**

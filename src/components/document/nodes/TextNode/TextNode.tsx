@@ -5,6 +5,7 @@ import { BaseNode } from "../BaseNode/BaseNode";
 import { TextNodeProps } from "./TextNode.types";
 import { SecondaryMenu } from "@/components/shared/SecondaryMenu/SecondaryMenu";
 import { TextType } from "./TextNode.types";
+import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const TextNode = (props: TextNodeProps) => {
   const { className = "" } = props;
@@ -13,6 +14,11 @@ export const TextNode = (props: TextNodeProps) => {
   const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
   const [nodeStyle, setNodeStyle] = useState<TextType>("span");
   const [value, setValue] = useState("");
+  const { selectedDocument } = useDocument();
+
+  useLayoutEffect(() => {
+    if (!selectedDocument) return;
+  }, [selectedDocument]);
 
   const secondaryMenuOptions = [
     {
@@ -57,18 +63,16 @@ export const TextNode = (props: TextNodeProps) => {
 
   const handleUpdate = () => {
     if (!onNodeUpdate) return;
+    if (!selectedDocument) return;
 
-    onNodeUpdate(
-      {
-        inlineIndex,
-        rowIndex,
-        isFullLine: false,
-        type: "text",
-        style: nodeStyle,
-        value,
-      },
-      { inlineIndex, rowIndex }
-    );
+    onNodeUpdate({
+      inlineIndex,
+      rowIndex,
+      isFullLine: false,
+      type: "text",
+      style: nodeStyle,
+      value,
+    });
   };
 
   return (

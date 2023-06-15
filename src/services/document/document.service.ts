@@ -13,11 +13,13 @@ export const updateDocument = async (
     const { documentData } = payload;
     if (documentData === null) return;
 
-    const flattenedDocumentData = JSON.stringify(documentData);
+    console.log({ payload });
+
+    // const flattenedDocumentData = JSON.stringify(documentData);
 
     await setDoc(doc(db, "documents", uid), {
       ...payload,
-      documentData: flattenedDocumentData,
+      documentData: documentData,
     });
   } catch (e) {
     console.log(e);
