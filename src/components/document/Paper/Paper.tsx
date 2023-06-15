@@ -105,29 +105,43 @@ export const Paper = (props: PaperProps) => {
   // Map document data lines to node lines (initial render)
   useLayoutEffect(() => {
     if (isMounted.current) return;
+    if (!documentDataProps) return;
 
-    if (documentDataProps === undefined || documentDataProps === null) return;
+    const sortedNodes = [...documentDataProps].sort(
+      (a, b) => a.inlineIndex - b.inlineIndex
+    );
 
-    // for each object in documentData
-    // Object.values(documentData).forEach((line) => {
-    //   // for each object in line
-    //   Object.values(line).forEach((node) => {
-    //     // bind line
-    //     bindLine(node);
-    //   });
-    // });
+    const groupedLines: { rowIndex: number; nodes: DocumentNodeRawData[] }[] =
+      [];
 
-    // const documentLines = Object.values(documentData);
+    sortedNodes.forEach((nodeData) => {
+      const { rowIndex } = nodeData;
 
-    // documentLines.forEach((line) => {
-    //   const nodes = Object.values(line);
-    //   nodes.forEach((node) => {
-    //     bindLine(node);
-    //   });
-    // });
+      // Find the line with the matching rowIndex
+      const lineIndex = groupedLines.findIndex(
+        (lineData) => lineData.rowIndex === rowIndex
+      );
+
+      if (lineIndex === -1) {
+        // Line doesn't exist, create a new line data
+        groupedLines.push({
+          rowIndex,
+          nodes: [nodeData],
+        });
+      } else {
+        // Line exists, add the node data to the existing line
+        groupedLines[lineIndex].nodes.push(nodeData);
+      }
+    });
+
+    // Bind lines and nodes based on the data
+    groupedLines.forEach((lineData) => {
+      lineData.nodes.sort((a, b) => a.inlineIndex - b.inlineIndex);
+      bindLine(lineData.nodes);
+    });
 
     isMounted.current = true;
-  }, [bindLine, documentDataProps]);
+  }, [documentDataProps, bindLine]);
 
   return (
     <article

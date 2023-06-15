@@ -71,7 +71,10 @@ export const DocumentView = (props: DocumentViewProps) => {
 
       {/* Document */}
       <div className="overflow-y-auto h-screen max-h-screen">
-        <Paper className="bg-[#f9f9f9] rounded-none text-black mb-32" />
+        <Paper
+          document={currentDocument}
+          className="bg-[#f9f9f9] rounded-none text-black mb-32"
+        />
       </div>
     </section>
   );
