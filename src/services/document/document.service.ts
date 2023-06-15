@@ -11,11 +11,7 @@ export const updateDocument = async (
     if (!user) throw new Error("User not authenticated");
 
     const { documentData } = payload;
-    if (documentData === null) return;
-
-    console.log({ payload });
-
-    // const flattenedDocumentData = JSON.stringify(documentData);
+    if (!documentData) return;
 
     await setDoc(doc(db, "documents", uid), {
       ...payload,

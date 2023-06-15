@@ -61,7 +61,7 @@ export const TextNode = (props: TextNodeProps) => {
     setValue(value);
   }, [data]);
 
-  const handleUpdate = () => {
+  const handleUpdate = (updatedValue: string) => {
     if (!onNodeUpdate) return;
     if (!selectedDocument) return;
 
@@ -71,7 +71,7 @@ export const TextNode = (props: TextNodeProps) => {
       isFullLine: false,
       type: "text",
       style: nodeStyle,
-      value,
+      value: updatedValue,
     });
   };
 
@@ -88,7 +88,7 @@ export const TextNode = (props: TextNodeProps) => {
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            handleUpdate();
+            handleUpdate(e.target.value);
           }}
           type="text"
           placeholder="Lorem ipsum..."

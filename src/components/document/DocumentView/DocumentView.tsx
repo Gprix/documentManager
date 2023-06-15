@@ -5,7 +5,7 @@ import { DocumentViewProps } from "./DocumentView.types";
 import Button from "@/components/shared/Button/Button";
 import RightArrowWhiteSVG from "../../../../public/images/icons/right-arrow-white.svg";
 import { Paper } from "../Paper/Paper";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   getDocument,
   updateDocument,
@@ -18,12 +18,14 @@ export const DocumentView = (props: DocumentViewProps) => {
   const { documentId } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
   const { title } = selectedDocument ?? {};
+  const [currentDocument, setCurrentDocument] = useState(selectedDocument);
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
     if (!selectedDocument.documentData) return;
+    if (!currentDocument) return;
 
-    await updateDocument(selectedDocument.uid, selectedDocument);
+    await updateDocument(currentDocument.uid, currentDocument);
   };
 
   useLayoutEffect(() => {
@@ -40,6 +42,10 @@ export const DocumentView = (props: DocumentViewProps) => {
       setSelectedDocument(undefined);
     };
   }, [documentId, setSelectedDocument]);
+
+  useEffect(() => {
+    setCurrentDocument(selectedDocument);
+  }, [selectedDocument]);
 
   return (
     <section className={`DocumentView ${className}`}>
