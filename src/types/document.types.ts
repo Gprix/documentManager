@@ -15,6 +15,8 @@ export type DocumentLineRawDataPosition = {
   inlineIndex: number;
 };
 
+export type InputNodeRawData = TextInputNodeRawData | NumberInputNodeRawData;
+
 export type DocumentNodeRawData =
   | TextBlockNodeRawData
   | TextInputNodeRawData
