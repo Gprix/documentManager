@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { collection, addDoc, ref, uploadBytes  } from 'firebase/firestore';
 import { DocumentPreview } from "@/components/document/DocumentPreview/DocumentPreview";
 import { RecentTemplates } from "@/components/document/RecentTemplates/RecentTemplates";
-import React, { useState } from "react";
-import { collection, addDoc, ref, uploadBytes  } from 'firebase/firestore';
 
 const RecentDocuments = () => {
   return (
