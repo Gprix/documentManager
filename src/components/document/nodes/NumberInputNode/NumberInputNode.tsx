@@ -1,12 +1,32 @@
 import { useLayoutEffect, useState } from "react";
 import { BaseNode } from "../BaseNode/BaseNode";
 import { NumberInputNodeProps } from "./NumberInputNode.types";
+import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const NumberInputNode = (props: NumberInputNodeProps) => {
   const { className = "" } = props;
-  const { data, rowIndex } = props;
+  const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
+  const { selectedDocument } = useDocument();
   const [value, setValue] = useState(0);
-  const [_linkingKey, setLinkingKey] = useState<string | null>(null);
+  const [linkingKey, setLinkingKey] = useState<string | null>(null);
+
+  const handleUpdate = (updatedValue: number) => {
+    if (!onNodeUpdate) return;
+    if (!selectedDocument) return;
+
+    onNodeUpdate({
+      rowIndex,
+      inlineIndex,
+      isFullLine: false,
+      type: "numberInput",
+      linkedTo: linkingKey,
+      value: updatedValue,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (!selectedDocument) return;
+  }, [selectedDocument]);
 
   useLayoutEffect(() => {
     if (!data) return;
@@ -21,7 +41,10 @@ export const NumberInputNode = (props: NumberInputNodeProps) => {
       className={`NumberInputNode px-3 pt-1 hover:cursor-text ${className}`}
     >
       <input
-        onChange={(e) => setValue(parseInt(e.target.value))}
+        onChange={(e) => {
+          setValue(+e.target.value);
+          handleUpdate(+e.target.value);
+        }}
         value={value}
         type="number"
         placeholder="123..."

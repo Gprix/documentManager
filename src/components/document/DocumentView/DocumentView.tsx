@@ -6,10 +6,8 @@ import Button from "@/components/shared/Button/Button";
 import RightArrowWhiteSVG from "../../../../public/images/icons/right-arrow-white.svg";
 import { Paper } from "../Paper/Paper";
 import { useEffect, useLayoutEffect, useState } from "react";
-import {
-  getDocument,
-  updateDocument,
-} from "@/services/document/document.service";
+import { getDocument } from "@/services/document/document.service";
+import { updateDocument } from "@/services/document/document.service";
 import { Document } from "@/types/document.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 

@@ -1,8 +1,12 @@
 "use client";
 
 import SideBar from "@/components/SideBar/SideBar";
+import { useAuth } from "@/contexts/auth/auth.context.hooks";
+import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { Workspace } from "@/contexts/workspace/workspace.context.types";
+import { getDatablocksInWorkspace } from "@/services/datablocks/datablocks.service";
+import { DataBlock } from "@/services/datablocks/datablocks.service.types";
 import { getWorkspace } from "@/services/workspace/workspace.service";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useMemo, useState, useRef } from "react";
@@ -10,6 +14,8 @@ import { useLayoutEffect, useMemo, useState, useRef } from "react";
 const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const { selectedWorkspace, setSelectedWorkspace } = useWorkspace();
+  const { setSelectedDatablocks } = useDatablocks();
+  const { uid } = useAuth();
   const [peekComponents, setPeekComponents] = useState<React.ReactNode[]>([]);
   const selectedWorkspaceFromLocalStorage = useMemo(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -42,6 +48,18 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
     selectedWorkspaceFromLocalStorage,
     setSelectedWorkspace,
   ]);
+
+  useLayoutEffect(() => {
+    if (!uid) return;
+    if (!selectedWorkspace) return;
+
+    const getDatablocks = async () => {
+      const datablocks = await getDatablocksInWorkspace(selectedWorkspace.uid);
+      setSelectedDatablocks(datablocks as DataBlock[]);
+    };
+
+    getDatablocks();
+  }, [selectedWorkspace, setSelectedDatablocks, uid]);
 
   return (
     <>

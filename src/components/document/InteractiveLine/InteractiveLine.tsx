@@ -51,6 +51,8 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             setNodes((prevNodes) => [
               ...prevNodes,
               <TextBlockNode
+                onNodeUpdate={onNodeUpdate}
+                inlineIndex={inlineIndex ?? prevNodes.length}
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextBlockNodeRawData}
                 key={`text-block-node-${inlineIndex}-${rowIndex}`}
@@ -62,6 +64,8 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             setNodes((prevNodes) => [
               ...prevNodes,
               <TextInputNode
+                onNodeUpdate={onNodeUpdate}
+                inlineIndex={inlineIndex ?? prevNodes.length}
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextInputNodeRawData}
                 key={`text-input-node-${inlineIndex}-${rowIndex}`}
@@ -73,6 +77,8 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
             setNodes((prevNodes) => [
               ...prevNodes,
               <NumberInputNode
+                onNodeUpdate={onNodeUpdate}
+                inlineIndex={inlineIndex ?? prevNodes.length}
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as NumberInputNodeRawData}
                 key={`number-input-node-${inlineIndex}-${rowIndex}`}
