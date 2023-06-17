@@ -18,6 +18,6 @@ export const googleAuthUtility = async (auth: AuthContextProviderValue) => {
       role: "NOTARIO/A",
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };

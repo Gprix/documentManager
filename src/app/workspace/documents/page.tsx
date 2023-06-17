@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { collection, addDoc, ref, uploadBytes  } from 'firebase/firestore';
 import { DocumentPreview } from "@/components/document/DocumentPreview/DocumentPreview";
 import { RecentTemplates } from "@/components/document/RecentTemplates/RecentTemplates";
+import { useState } from "react";
 
 const RecentDocuments = () => {
   return (
@@ -102,7 +101,6 @@ const DocumentsPage = () => {
 
   // @ts-ignore
   const handleFileUpload = async (file) => {
-
     //TODO - Subir el archivo a Firebase Storage y crear un documento en Firestore con la información del archivo
 
     // const firestore = firebase.firestore();
@@ -176,7 +174,7 @@ const DocumentsPage = () => {
                 id="fileInput"
                 type="file"
                 className="hidden"
-                onChange={(e) => handleFileUpload(e.target.files[0])}
+                onChange={(e) => handleFileUpload(e.target.files?.[0])}
               />
             </label>
 
