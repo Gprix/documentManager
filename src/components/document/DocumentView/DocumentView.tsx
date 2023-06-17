@@ -13,12 +13,8 @@ import {
 import { Document } from "@/types/document.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
-import DropdownArrowWhiteSVG from "../../../../public/images/icons/dropdown-arrow-white.svg";
-import LeftArrowAltSVG from "../../../../public/images/icons/left-arrow-alt.svg";
-import RightArrowAltSVG from "../../../../public/images/icons/right-arrow-alt.svg";
+// import DropdownArrowWhiteSVG from "../../../../public/images/icons/dropdown-arrow-white.svg";
 import { DataCaptureModal } from "../DataCaptureModal/DataCaptureModal";
-import { LinkedNodePreview } from "../LinkedNodePreview/LinkedNodePreview";
-import Image from "next/image";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
@@ -86,22 +82,18 @@ export const DocumentView = (props: DocumentViewProps) => {
           />
         </div>
 
-        <div className="absolute right-0 top-0">
-          <div className="bg-secondaryLight rounded-lg p-2 shadow flex">
-            <LinkedNodePreview linkedTo="linkedNodeName" />
-            <Image src={LeftArrowAltSVG} alt="" />
-            <Image src={RightArrowAltSVG} alt="" />
-          </div>
-        </div>
+        {/* <div className="absolute right-0 top-0">
+          <DataCaptureWidget />
+        </div> */}
 
         <div className="absolute right-0 bottom-0 pt-4 pl-4">
-          <Button
+          {/* <Button
             className="mr-4 mb-32"
             rightIcon={DropdownArrowWhiteSVG}
             onClick={() => setShowDataCaptureModal(!showDataCaptureModal)}
           >
             Capturar datos
-          </Button>
+          </Button> */}
         </div>
       </section>
       {showDataCaptureModal ? (
