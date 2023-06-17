@@ -51,3 +51,5 @@ export interface TextNodeRawData extends NodeRawData {
   style: TextType;
   value: string;
 }
+
+export type DocumentType = "protocol" | "extra";

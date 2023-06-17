@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         primary: "hsla(341, 100%, 65%, 1)",
         primaryLight: "hsla(342, 100%, 93%, 1)",
+        secondary: "hsla(229, 97%, 77%, 1)",
         secondaryLight: "hsla(229, 100%, 97%, 1)",
         error: "hsla(0, 66%, 64%, 1)",
         dimmed: "hsla(0, 0%, 0%, 0.3)",
