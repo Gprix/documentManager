@@ -1,17 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { db } from "@/config/firebase.config";
+import { collection, addDoc } from 'firebase/firestore';
 
 const SchedulePage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);
   const [eventData, setEventData] = useState<Object>({
-    name: "",
+    clientName: "",
     date: "",
-    location: "",
+    time: null,
+    description: "",
   });
   const [_data, setData] = useState([]);
-
-  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -33,16 +34,21 @@ const SchedulePage = () => {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: Object) => {
+  const handleSubmit = async (e: Object) => {
     // @ts-ignore
     e.preventDefault();
-    // Save eventData to local storage
-    const newEvents = [...events, eventData];
-    localStorage.setItem("events", JSON.stringify(newEvents));
-    // Reset the form
-    setEventData({ name: "", date: "", location: "" });
-    // @ts-ignore
-    setEvents(newEvents);
+
+    try {
+      const docRef = await addDoc(collection(db, "appointments"), eventData);
+      console.log(
+        "Objeto JSON enviado correctamente. ID del documento: ",
+        docRef.id
+      );
+    } catch (error) {
+      console.error("Error al enviar el objeto JSON a Firestore: ", error);
+    }
+
+    setEventData({ clientName: "", date: "", time: null, description: "" });
     setModal(false);
   };
 
@@ -75,38 +81,60 @@ const SchedulePage = () => {
               X
             </button>
           </div>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Event Name:
+          <form
+            className="flex items-start flex-col px-10 pt-10 space-y-10 w-full"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex w-full">
+              <label className="w-1/3 flex items-center">Nombre Cliente:</label>
               <input
+                className="border-2 border-gray-300 rounded-md px-2  w-full"
                 type="text"
-                name="name"
+                name="clientName"
                 // @ts-ignore
-                value={eventData.name}
+                value={eventData.clientName}
                 onChange={handleChangeForm}
               />
-            </label>
-            <label>
-              Event Date:
+            </div>
+
+            <div className="flex w-full">
+              <label className="w-1/4 flex items-center">Fecha:</label>
               <input
+                className="border-2 border-gray-300 rounded-md px-2  w-full"
                 type="date"
                 name="date"
                 // @ts-ignore
                 value={eventData.date}
                 onChange={handleChangeForm}
               />
-            </label>
-            <label>
-              Event Location:
+
+              <label className="w-1/4 flex items-center pl-3">Hora:</label>
               <input
-                type="text"
-                name="location"
+                className="border-2 border-gray-300 rounded-md px-2  w-full"
+                type="time"
+                name="time"
                 // @ts-ignore
-                value={eventData.location}
+                value={eventData.time}
                 onChange={handleChangeForm}
               />
-            </label>
-            <button type="submit">Save Event</button>
+            </div>
+            <div className="flex w-full">
+              <label className="w-1/4 flex items-center">Descripcion:</label>
+              <input
+                className="border-2 border-gray-300 rounded-md px-2  w-full"
+                type="text"
+                name="description"
+                // @ts-ignore
+                value={eventData.description}
+                onChange={handleChangeForm}
+              />
+            </div>
+            <button
+              className=" bg-[#FF4D84] px-2 rounded-md text-[#FAFAFA] text-2l p-2"
+              type="submit"
+            >
+              Save Event
+            </button>
           </form>
         </div>
       </div>
