@@ -5,7 +5,8 @@ export interface Document {
   title: string;
   authorId: string;
   workspaceId: string;
-  documentData: NodeRawData[];
+  documentData: DocumentNodeRawData[];
+  documentType: DocumentType;
 }
 
 export type DocumentLineRawData = DocumentNodeRawData[];

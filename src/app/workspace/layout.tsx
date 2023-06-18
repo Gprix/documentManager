@@ -3,10 +3,13 @@
 import SideBar from "@/components/SideBar/SideBar";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
 import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
+import { useTemplates } from "@/contexts/templates/templates.context.hooks";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { Workspace } from "@/contexts/workspace/workspace.context.types";
 import { getDatablocksInWorkspace } from "@/services/datablocks/datablocks.service";
 import { DataBlock } from "@/services/datablocks/datablocks.service.types";
+import { getTemplatesInWorkspace } from "@/services/template/template.service";
+import { Template } from "@/services/template/template.service.types";
 import { getWorkspace } from "@/services/workspace/workspace.service";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useMemo, useState, useRef } from "react";
@@ -14,6 +17,7 @@ import { useLayoutEffect, useMemo, useState, useRef } from "react";
 const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const { selectedWorkspace, setSelectedWorkspace } = useWorkspace();
+  const { setSelectedTemplates } = useTemplates();
   const { setSelectedDatablocks } = useDatablocks();
   const { uid } = useAuth();
   const [peekComponents, setPeekComponents] = useState<React.ReactNode[]>([]);
@@ -60,6 +64,18 @@ const WorkspaceLayout = ({ children }: { children: React.ReactNode }) => {
 
     getDatablocks();
   }, [selectedWorkspace, setSelectedDatablocks, uid]);
+
+  useLayoutEffect(() => {
+    if (!uid) return;
+    if (!selectedWorkspace) return;
+
+    const getTemplates = async () => {
+      const templates = await getTemplatesInWorkspace(selectedWorkspace.uid);
+      setSelectedTemplates(templates as Template[]);
+    };
+
+    getTemplates();
+  }, [selectedWorkspace, setSelectedTemplates, uid]);
 
   return (
     <>

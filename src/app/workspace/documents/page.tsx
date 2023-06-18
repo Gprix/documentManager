@@ -1,78 +1,9 @@
 "use client";
 
-import { DocumentPreview } from "@/components/document/DocumentPreview/DocumentPreview";
+import { Archive } from "@/components/document/Archive/Archive";
+import { RecentDocuments } from "@/components/document/RecentDocuments/RecentDocuments";
 import { RecentTemplates } from "@/components/document/RecentTemplates/RecentTemplates";
 import { useState } from "react";
-
-const RecentDocuments = () => {
-  return (
-    <section>
-      <h2 className="Documents__subtitle">Documentos recientes</h2>
-      <ul className="flex gap-x-8 px-6">
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-      </ul>
-    </section>
-  );
-};
-
-const Archive = () => {
-  return (
-    <section>
-      <h2 className="Documents__subtitle">Directorio principal</h2>
-      <ul className="w-full flex-wrap flex gap-8 px-6">
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-        <DocumentPreview
-          previewNodes={[]}
-          documentType="protocol"
-          documentName="Acta rectificación 1234"
-        />
-      </ul>
-    </section>
-  );
-};
 
 const DocumentsPage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);

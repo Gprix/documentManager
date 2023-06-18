@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean:branches": "git fetch -p ; git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
   },
   "dependencies": {
     "@types/node": "20.2.5",
@@ -21,7 +22,7 @@
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "standard":"^8.6.0",
+    "standard": "^8.6.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.3"
   }

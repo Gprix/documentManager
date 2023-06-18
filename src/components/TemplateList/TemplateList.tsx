@@ -17,6 +17,7 @@ export const TemplatesList = (props: TemplateListProps) => {
       title: `Doc-${Date.now().toString()}`,
       workspaceId: selectedWorkspace.uid,
       documentData: [],
+      documentType: "protocol",
     });
 
     if (!newDocument) return;

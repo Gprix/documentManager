@@ -1,9 +1,19 @@
-export interface ProtocolTemplate {
-  id: string;
-  workspaceId: string;
-  authorId: string;
+import { Document, NodeRawData } from "@/types/document.types";
+
+/**
+ * Template interface
+ *
+ * @param {string} name - Name of the template
+ * @param {NodeRawData[]} templateData - Template data
+ * @param {boolean} enabled - Whether the template is enabled
+ */
+export interface Template extends Omit<Document, "title" | "documentData"> {
+  /** Name of the template */
   name: string;
-  // TODO: DocumentRawData
-  templateData: string;
+  /** Template data */
+  templateData: NodeRawData[];
+  /** Whether the template is enabled */
   enabled: boolean;
 }
+
+export interface WriteTemplatePayload extends Template {}

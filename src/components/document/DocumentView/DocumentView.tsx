@@ -18,9 +18,10 @@ export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
   const { documentId } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
-  const { title } = selectedDocument ?? {};
+  const { title, uid } = selectedDocument ?? {};
   const [currentDocument, setCurrentDocument] = useState(selectedDocument);
   const [showDataCaptureModal, setShowDataCaptureModal] = useState(false);
+  const { setRecentDocuments } = useDocument();
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
@@ -29,6 +30,12 @@ export const DocumentView = (props: DocumentViewProps) => {
 
     await updateDocument(currentDocument.uid, currentDocument);
   };
+
+  useLayoutEffect(() => {
+    if (!uid) return;
+
+    setRecentDocuments((prev) => [...prev, uid].slice(-5));
+  }, [setRecentDocuments, uid]);
 
   useLayoutEffect(() => {
     const retrieveDocument = async () => {

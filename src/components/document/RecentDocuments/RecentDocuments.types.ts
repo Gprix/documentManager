@@ -1,9 +1,9 @@
 /**
- * DocumentPreview component props.
+ * RecentDocuments component props.
  *
  * @param {string} className - Custom className.
  */
-export interface DocumentPreviewProps {
+export interface RecentDocumentsProps {
   /** Custom className. */
   className?: string;
 }
