@@ -1,10 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { DocumentPreviewProps } from "./DocumentPreview.types";
+import { nodesDataToTextHelper } from "./DocumentPreview.helpers";
+import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
 
 export const DocumentPreview = (props: DocumentPreviewProps) => {
   const { className = "" } = props;
   const { documentType, documentName, documentId } = props;
+  const { previewNodes } = props;
   const isProtocol = documentType === "protocol";
+  const { selectedDatablocks } = useDatablocks();
 
   return (
     <div>
@@ -14,14 +20,8 @@ export const DocumentPreview = (props: DocumentPreviewProps) => {
         } transition-all rounded-t-xl duration-150 ${className}`}
       >
         <Link href={`/workspace/workshop/${documentId}`}>
-          {/* // TODO: Document preview (idea of approach: rendered text) */}
           <p className="max-h-[10rem] py-2 pl-2 text-dimmed text-sm pr-6 pb-10 overflow-y-scroll">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis
-            pariatur ab quis praesentium ut debitis expedita laborum assumenda
-            necessitatibus, deleniti architecto sunt laudantium possimus
-            delectus labore obcaecati dolores deserunt molestias maxime dolorum
-            cum optio quos error id! Consequuntur eveniet saepe asperiores,
-            porro odio voluptatibus, enim, debitis unde ad nam aspernatur?
+            {nodesDataToTextHelper(previewNodes, selectedDatablocks ?? [])}
           </p>
         </Link>
         <p
