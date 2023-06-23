@@ -98,7 +98,7 @@ export const TextNode = (props: TextNodeProps) => {
       {showSecondaryMenu ? (
         <SecondaryMenu
           top={origin.y}
-          left={origin.x}
+          left={origin.x - 140}
           onDismiss={() => setShowSecondaryMenu(false)}
         >
           <ul role="listbox">
@@ -113,7 +113,7 @@ export const TextNode = (props: TextNodeProps) => {
               return (
                 <li key={name}>
                   <button
-                    className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
+                    className="context-menu__item"
                     onClick={() => actionHandler()}
                   >
                     {name}

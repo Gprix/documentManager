@@ -13,33 +13,57 @@ import { useDocument } from "@/contexts/document/document.context.hooks";
 
 // import DropdownArrowWhiteSVG from "../../../../public/images/icons/dropdown-arrow-white.svg";
 import { DataCaptureModal } from "../DataCaptureModal/DataCaptureModal";
+import { DocumentToolbox } from "../DocumentToolbox/DocumentToolbox";
+import { getTemplate } from "@/services/template/template.service";
+import { updateTemplate } from "@/services/template/template.service";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
-  const { documentId } = props;
+  const { documentId, isTemplate } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
-  const { title, uid } = selectedDocument ?? {};
+  //@ts-ignore
+  const { title, uid, name: templateName } = selectedDocument ?? {};
   const [currentDocument, setCurrentDocument] = useState(selectedDocument);
   const [showDataCaptureModal, setShowDataCaptureModal] = useState(false);
   const { setRecentDocuments } = useDocument();
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
     if (!selectedDocument.documentData) return;
     if (!currentDocument) return;
 
-    await updateDocument(currentDocument.uid, currentDocument);
+    if (isEditing && isTemplate) {
+      await updateTemplate(currentDocument.uid, {
+        workspaceId: currentDocument.workspaceId,
+        documentType: currentDocument.documentType,
+        // TODO: manage this better
+        enabled: true,
+        // @ts-ignore
+        templateData: currentDocument.templateData,
+        // @ts-ignore
+        name: currentDocument.name,
+      });
+    }
+
+    if (isEditing && !isTemplate)
+      await updateDocument(currentDocument.uid, currentDocument);
+
+    setIsEditing((prev) => !prev);
   };
 
   useLayoutEffect(() => {
+    if (isTemplate) return;
     if (!uid) return;
 
     setRecentDocuments((prev) => [...prev, uid].slice(-5));
-  }, [setRecentDocuments, uid]);
+  }, [isTemplate, setRecentDocuments, uid]);
 
   useLayoutEffect(() => {
     const retrieveDocument = async () => {
-      const retrievedDocument = await getDocument(documentId);
+      const retrievedDocument = isTemplate
+        ? await getTemplate(documentId)
+        : await getDocument(documentId);
 
       if (!retrievedDocument) return;
 
@@ -50,7 +74,7 @@ export const DocumentView = (props: DocumentViewProps) => {
     return () => {
       setSelectedDocument(undefined);
     };
-  }, [documentId, setSelectedDocument]);
+  }, [documentId, isTemplate, setSelectedDocument]);
 
   useEffect(() => {
     setCurrentDocument(selectedDocument);
@@ -65,7 +89,9 @@ export const DocumentView = (props: DocumentViewProps) => {
             <div className="DocumentView__controls--left flex w-full">
               <GoBack />
               <div className="DocumentView__info">
-                <p className="text-black text-xl">{title}</p>
+                <p className="text-black text-xl">
+                  {isTemplate ? templateName : title}
+                </p>
                 <p className="text-dimmed">Última modificación por: </p>
               </div>
             </div>
@@ -74,16 +100,27 @@ export const DocumentView = (props: DocumentViewProps) => {
               className="DocumentView__button"
               rightIcon={RightArrowWhiteSVG}
             >
-              Editar
+              {isEditing ? "Guardar" : "Editar"}
             </Button>
           </div>
         </div>
 
+        {/* Document toolbar */}
+        <DocumentToolbox />
+
         {/* Document */}
-        <div className="overflow-y-auto h-screen max-h-screen">
+        <div
+          className={`overflow-y-auto h-screen max-h-screen ${
+            isEditing ? "bg-secondaryLight" : ""
+          }`}
+        >
           <Paper
             document={currentDocument}
-            className="bg-[#f9f9f9] rounded-none text-black mb-32"
+            className={`text-black mb-32 ${
+              isEditing
+                ? "bg-white rounded-xl mx-32 mt-8"
+                : "bg-[#f9f9f9] rounded-none"
+            }`}
           />
         </div>
 

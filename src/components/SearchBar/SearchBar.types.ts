@@ -1,9 +1,9 @@
 /**
- * RecentTemplates component props.
+ * SearchBar component props.
  *
  * @param {string} className - Custom className.
  */
-export interface RecentTemplatesProps {
+export interface SearchBarProps {
   /** Custom className. */
   className?: string;
 }

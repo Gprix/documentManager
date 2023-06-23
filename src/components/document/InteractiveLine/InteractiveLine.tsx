@@ -147,7 +147,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
               <SecondaryMenu
                 top={origin.y}
                 // TODO: find a way to calculate the width of the menu
-                left={!isCursorPastMiddle ? origin.x : origin.x - 205}
+                left={!isCursorPastMiddle ? origin.x - 140 : origin.x - 345}
                 onDismiss={() => setShowSecondaryMenu(false)}
               >
                 <ul role="listbox">
@@ -157,7 +157,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                     return (
                       <li key={name}>
                         <button
-                          className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
+                          className="context-menu__item"
                           onClick={() => bindNode(undefined, actionType)}
                         >
                           {name}

@@ -16,4 +16,5 @@ export interface Template extends Omit<Document, "title" | "documentData"> {
   enabled: boolean;
 }
 
-export interface WriteTemplatePayload extends Template {}
+export interface WriteTemplatePayload
+  extends Omit<Template, "uid" | "authorId"> {}

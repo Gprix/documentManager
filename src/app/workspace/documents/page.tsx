@@ -2,13 +2,17 @@
 
 import { Archive } from "@/components/document/Archive/Archive";
 import { RecentDocuments } from "@/components/document/RecentDocuments/RecentDocuments";
-import { RecentTemplates } from "@/components/document/RecentTemplates/RecentTemplates";
+import { DocumentActions } from "@/components/document/DocumentActions/DocumentActions";
 import { useState } from "react";
+import { TemplatesModal } from "@/components/document/TemplatesModal/TemplatesModal";
+import { useTemplates } from "@/contexts/templates/templates.context.hooks";
 
 const DocumentsPage = () => {
+  const { selectedTemplates } = useTemplates();
   const [modalFlag, setModal] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+  const [showTemplatesModal, setShowTemplatesModal] = useState(false);
 
   // @ts-ignore
   const handleDragOver = (event) => {
@@ -121,28 +125,51 @@ const DocumentsPage = () => {
   };
 
   return (
-    <section className="Documents flex-grow bg-blue-50 text-black overflow-y-auto pt-6 pb-32">
-      <h1 className="Documents__title text-2xl font-bold mb-3 ml-6">
-        Archivo notarial
-      </h1>
-      {/* <input type="text" className="Documents__search" /> */}
-      <RecentTemplates />
-      <RecentDocuments />
-      <Archive />
-      <div className="fixed bottom-[5%] right-[5%]">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => {
-            setModal(true);
-          }}
-        >
-          Subir documento
-        </button>
-      </div>
-      <div className={`flex gap-4 wrap ${!modalFlag ? "hidden" : ""}`}>
-        {renderUploadDoc()}
-      </div>
-    </section>
+    <>
+      <section className="Documents flex-grow bg-blue-50 text-black overflow-y-auto pt-6 pb-32">
+        <h1 className="Documents__title text-2xl font-bold mb-3 ml-6">
+          Archivo notarial
+        </h1>
+        {/* <input type="text" className="Documents__search" /> */}
+        <div className="relative">
+          <DocumentActions
+            templateList={selectedTemplates ?? []}
+            className="pt-6"
+            withNewAction
+            newActionLabel="Nueva acta"
+          />
+          <div className="absolute top-0 right-0">
+            <p className="text-dimmed text-sm text-right pr-4 pt-3">
+              Plantillas recientes
+            </p>
+            <p
+              onClick={() => setShowTemplatesModal(!showTemplatesModal)}
+              className="text-dimmed text-xs text-right pr-4 underline hover:cursor-pointer"
+            >
+              Ver plantillas
+            </p>
+          </div>
+        </div>
+        <RecentDocuments />
+        <Archive />
+        <div className="fixed bottom-[5%] right-[5%]">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => {
+              setModal(true);
+            }}
+          >
+            Subir documento
+          </button>
+        </div>
+        <div className={`flex gap-4 wrap ${!modalFlag ? "hidden" : ""}`}>
+          {renderUploadDoc()}
+        </div>
+      </section>
+      {showTemplatesModal ? (
+        <TemplatesModal onClose={() => setShowTemplatesModal(false)} />
+      ) : null}
+    </>
   );
 };
 
