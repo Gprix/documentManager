@@ -1,7 +1,4 @@
-import {
-  /*Document,*/ DocumentType,
-  NodeRawData,
-} from "@/types/document.types";
+import { DocumentType, NodeRawData } from "@/types/document.types";
 
 /**
  * DocumentPreview component props.
@@ -11,6 +8,7 @@ import {
  * @param {DocumentType} previewType - Type of document.
  * @param {string} documentName - Name of document.
  * @param {string} documentId - Document id.
+ * @param {string} isTemplate - Is document template.
  */
 export interface DocumentPreviewProps {
   /** Custom className. */
@@ -23,17 +21,8 @@ export interface DocumentPreviewProps {
   documentName: string;
   /** Document id. */
   documentId: string;
+  /** Is document template. */
+  isTemplate?: boolean;
 }
-
-// export interface DocumentPreview
-//   extends Omit<
-//     Document,
-//     "title" | "authorId" | "workspaceId" | "documentData"
-//   > {
-//   title?: string;
-//   name?: string;
-//   documentData?: NodeRawData[];
-//   templateData?: NodeRawData[];
-// }
 
 export type DocumentPreview = string[];

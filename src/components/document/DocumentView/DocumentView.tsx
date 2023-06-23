@@ -16,42 +16,42 @@ import { DataCaptureModal } from "../DataCaptureModal/DataCaptureModal";
 import { DocumentToolbox } from "../DocumentToolbox/DocumentToolbox";
 import { getTemplate } from "@/services/template/template.service";
 import { updateTemplate } from "@/services/template/template.service";
+import { WriteTemplatePayload } from "@/services/template/template.service.types";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
   const { documentId, isTemplate } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
-  //@ts-ignore
-  const { title, uid, name: templateName } = selectedDocument ?? {};
-  const [currentDocument, setCurrentDocument] = useState(selectedDocument);
+  const { title, uid } = selectedDocument ?? {};
   const [showDataCaptureModal, setShowDataCaptureModal] = useState(false);
   const { setRecentDocuments } = useDocument();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
-    if (!selectedDocument.documentData) return;
-    if (!currentDocument) return;
 
     if (isEditing && isTemplate) {
-      await updateTemplate(currentDocument.uid, {
-        workspaceId: currentDocument.workspaceId,
-        documentType: currentDocument.documentType,
-        // TODO: manage this better
+      const currentTemplateId: string = selectedDocument.uid;
+
+      const currentTemplate: WriteTemplatePayload = {
+        workspaceId: selectedDocument.workspaceId,
+        documentType: selectedDocument.documentType,
+        templateData: selectedDocument.documentData,
+        name: selectedDocument.title,
+        // TODO: manage enabled state better
         enabled: true,
-        // @ts-ignore
-        templateData: currentDocument.templateData,
-        // @ts-ignore
-        name: currentDocument.name,
-      });
+      };
+
+      await updateTemplate(currentTemplateId, currentTemplate);
     }
 
     if (isEditing && !isTemplate)
-      await updateDocument(currentDocument.uid, currentDocument);
+      await updateDocument(selectedDocument.uid, selectedDocument);
 
     setIsEditing((prev) => !prev);
   };
 
+  // Set recent documents
   useLayoutEffect(() => {
     if (isTemplate) return;
     if (!uid) return;
@@ -59,6 +59,7 @@ export const DocumentView = (props: DocumentViewProps) => {
     setRecentDocuments((prev) => [...prev, uid].slice(-5));
   }, [isTemplate, setRecentDocuments, uid]);
 
+  // Retrieve document
   useLayoutEffect(() => {
     const retrieveDocument = async () => {
       const retrievedDocument = isTemplate
@@ -66,6 +67,19 @@ export const DocumentView = (props: DocumentViewProps) => {
         : await getDocument(documentId);
 
       if (!retrievedDocument) return;
+
+      if (isTemplate) {
+        const rawDoc: Document = {
+          uid: retrievedDocument.uid,
+          authorId: retrievedDocument.authorId,
+          workspaceId: retrievedDocument.workspaceId,
+          documentType: retrievedDocument.documentType,
+          title: retrievedDocument.name,
+          documentData: retrievedDocument.templateData,
+        };
+        setSelectedDocument(rawDoc as Document);
+        return;
+      }
 
       setSelectedDocument(retrievedDocument as Document);
     };
@@ -77,7 +91,7 @@ export const DocumentView = (props: DocumentViewProps) => {
   }, [documentId, isTemplate, setSelectedDocument]);
 
   useEffect(() => {
-    setCurrentDocument(selectedDocument);
+    if (!selectedDocument) return;
   }, [selectedDocument]);
 
   return (
@@ -89,10 +103,8 @@ export const DocumentView = (props: DocumentViewProps) => {
             <div className="DocumentView__controls--left flex w-full">
               <GoBack />
               <div className="DocumentView__info">
-                <p className="text-black text-xl">
-                  {isTemplate ? templateName : title}
-                </p>
-                <p className="text-dimmed">Última modificación por: </p>
+                <p className="text-black text-xl">{title}</p>
+                {/* <p className="text-dimmed">Última modificación por: </p> */}
               </div>
             </div>
             <Button
@@ -106,7 +118,7 @@ export const DocumentView = (props: DocumentViewProps) => {
         </div>
 
         {/* Document toolbar */}
-        <DocumentToolbox />
+        {isEditing ? <DocumentToolbox /> : null}
 
         {/* Document */}
         <div
@@ -115,8 +127,8 @@ export const DocumentView = (props: DocumentViewProps) => {
           }`}
         >
           <Paper
-            document={currentDocument}
-            className={`text-black mb-32 ${
+            document={{ ...selectedDocument } as Document}
+            className={`text-black mb-32 transition-all duration-150 ${
               isEditing
                 ? "bg-white rounded-xl mx-32 mt-8"
                 : "bg-[#f9f9f9] rounded-none"

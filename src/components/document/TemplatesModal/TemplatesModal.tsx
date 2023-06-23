@@ -11,6 +11,7 @@ import { writeTemplate } from "@/services/template/template.service";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { useRouter } from "next/navigation";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
+import { getPreviewNodesUtility } from "@/utils/document.utils";
 
 export const TemplatesModal = (props: TemplatesModalProps) => {
   const { className = "", onClose } = props;
@@ -43,7 +44,7 @@ export const TemplatesModal = (props: TemplatesModalProps) => {
   return (
     <Modal
       onClose={onClose}
-      className={`TemplatesModal centered-relative ${className}`}
+      className={`TemplatesModal centered-relative pb-6 ${className}`}
     >
       <h2 className="ml-6 font-medium text-xl mt-8 mb-6">Plantillas</h2>
       <DocumentActions
@@ -95,19 +96,24 @@ export const TemplatesModal = (props: TemplatesModalProps) => {
         </Button>
       </div>
 
-      {selectedTemplates?.map((template) => {
-        const { uid, documentType, name } = template;
+      <ul className="w-full flex-wrap flex gap-8 px-6">
+        {selectedTemplates?.map((template) => {
+          const { uid, documentType, name, templateData } = template;
 
-        return (
-          <DocumentPreview
-            documentId={uid}
-            key={uid}
-            previewNodes={[]}
-            documentType={documentType}
-            documentName={name}
-          />
-        );
-      })}
+          const previewNodes = getPreviewNodesUtility(templateData);
+
+          return (
+            <DocumentPreview
+              documentId={uid}
+              key={uid}
+              previewNodes={previewNodes}
+              documentType={documentType}
+              documentName={name}
+              isTemplate
+            />
+          );
+        })}
+      </ul>
     </Modal>
   );
 };

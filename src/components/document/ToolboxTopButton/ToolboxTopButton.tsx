@@ -16,7 +16,9 @@ export const ToolboxTopButton = (props: ToolboxTopButtonProps) => {
 
   return (
     <>
-      <button onClick={(e) => handleUpdate(e)}>{children}</button>
+      <button className="text-sm" onClick={(e) => handleUpdate(e)}>
+        {children}
+      </button>
       {showSecondaryMenu ? (
         <SecondaryMenu
           top={origin.y + 10}

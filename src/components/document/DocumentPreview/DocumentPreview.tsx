@@ -8,7 +8,7 @@ import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
 export const DocumentPreview = (props: DocumentPreviewProps) => {
   const { className = "" } = props;
   const { documentType, documentName, documentId } = props;
-  const { previewNodes } = props;
+  const { previewNodes, isTemplate = false } = props;
   const isProtocol = documentType === "protocol";
   const { selectedDatablocks } = useDatablocks();
 
@@ -19,7 +19,11 @@ export const DocumentPreview = (props: DocumentPreviewProps) => {
           isProtocol ? "hover:border-primary" : "hover:border-secondary"
         } transition-all rounded-t-xl duration-150 ${className}`}
       >
-        <Link href={`/workspace/workshop/${documentId}`}>
+        <Link
+          href={`/workspace/workshop/${documentId}${
+            isTemplate ? "?isTemplate=true" : ""
+          }`}
+        >
           <p className="max-h-[10rem] py-2 pl-2 text-dimmed text-sm pr-6 pb-10 overflow-y-scroll">
             {nodesDataToTextHelper(previewNodes, selectedDatablocks ?? [])}
           </p>

@@ -26,12 +26,14 @@ export const DocumentActions = (props: DocumentActionsProps) => {
             const previewNodes = getPreviewNodesUtility(templateData);
 
             return (
+              // TODO: New document based on template
               <DocumentPreview
                 documentId={uid}
                 key={uid}
                 previewNodes={previewNodes}
                 documentType={documentType}
                 documentName={name}
+                isTemplate
               />
             );
           })}

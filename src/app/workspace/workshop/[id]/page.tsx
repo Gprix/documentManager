@@ -8,7 +8,7 @@ const DocumentViewPage = async ({
   searchParams?: { isTemplate: boolean };
 }) => {
   const { id } = params;
-  const { isTemplate } = searchParams ?? {};
+  const { isTemplate = false } = searchParams ?? {};
 
   return (
     <section className="flex-grow">

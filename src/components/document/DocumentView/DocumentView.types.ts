@@ -11,5 +11,5 @@ export interface DocumentViewProps {
   /** Document id. */
   documentId: string;
   /** If the document is a template. */
-  isTemplate?: boolean;
+  isTemplate: boolean;
 }
