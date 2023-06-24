@@ -9,6 +9,7 @@ import { DocumentType, NodeRawData } from "@/types/document.types";
  * @param {string} documentName - Name of document.
  * @param {string} documentId - Document id.
  * @param {string} isTemplate - Is document template.
+ * @param {() => void} action - Function to execute when the document is clicked.
  */
 export interface DocumentPreviewProps {
   /** Custom className. */
@@ -23,6 +24,8 @@ export interface DocumentPreviewProps {
   documentId: string;
   /** Is document template. */
   isTemplate?: boolean;
+  /** Function to execute when the document is clicked. */
+  action?: () => void;
 }
 
 export type DocumentPreview = string[];

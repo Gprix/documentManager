@@ -7,17 +7,12 @@ import Button from "@/components/shared/Button/Button";
 import { useState } from "react";
 import { useTemplates } from "@/contexts/templates/templates.context.hooks";
 import { DocumentPreview } from "../DocumentPreview/DocumentPreview";
-import { writeTemplate } from "@/services/template/template.service";
-import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
-import { useRouter } from "next/navigation";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
 import { getPreviewNodesUtility } from "@/utils/document.utils";
 
 export const TemplatesModal = (props: TemplatesModalProps) => {
   const { className = "", onClose } = props;
-  const { push } = useRouter();
   const { selectedTemplates } = useTemplates();
-  const { selectedWorkspace } = useWorkspace();
   const [filters, setFilters] = useState({
     protocol: true,
     extra: true,
@@ -25,21 +20,6 @@ export const TemplatesModal = (props: TemplatesModalProps) => {
   });
   const buttonInactiveStyle = "bg-transparent hover:bg-primaryLight";
   const buttonInactiveTextStyle = "!text-primary";
-
-  const newTemplateHandler = async () => {
-    if (!selectedWorkspace) return;
-
-    const newTemplate = await writeTemplate({
-      name: `Template-${Date.now().toString()}`,
-      templateData: [],
-      documentType: "protocol",
-      enabled: true,
-      workspaceId: selectedWorkspace.uid,
-    });
-
-    if (!newTemplate) return;
-    push(`/workspace/workshop/${newTemplate}?isTemplate=true`);
-  };
 
   return (
     <Modal
@@ -51,7 +31,8 @@ export const TemplatesModal = (props: TemplatesModalProps) => {
         templateList={selectedTemplates ?? []}
         withNewAction
         newActionLabel="Nueva plantilla"
-        newAction={() => newTemplateHandler()}
+        isTemplate
+        mode="new"
       />
 
       <SearchBar />
