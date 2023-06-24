@@ -3,11 +3,8 @@
 import { PaperProps } from "./Paper.types";
 import InteractiveLine from "../InteractiveLine/InteractiveLine";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import {
-  Document,
-  DocumentLineRawData,
-  DocumentNodeRawData,
-} from "@/types/document.types";
+import { DocumentLineRawData } from "@/types/document.types";
+import { Document, DocumentNodeRawData } from "@/types/document.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const Paper = (props: PaperProps) => {

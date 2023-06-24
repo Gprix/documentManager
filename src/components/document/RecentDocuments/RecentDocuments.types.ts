@@ -1,9 +1,9 @@
 /**
- * RecentTemplates component props.
+ * RecentDocuments component props.
  *
  * @param {string} className - Custom className.
  */
-export interface RecentTemplatesProps {
+export interface RecentDocumentsProps {
   /** Custom className. */
   className?: string;
 }

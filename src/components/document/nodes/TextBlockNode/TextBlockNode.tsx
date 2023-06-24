@@ -71,7 +71,7 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
           className="w-[20rem] max-w-[20rem]"
           top={origin.y}
           // TODO: find a way to calculate the width of the menu
-          left={!isCursorPastMiddle ? origin.x : origin.x - 320}
+          left={!isCursorPastMiddle ? origin.x - 140 : origin.x - 320 - 140}
           onDismiss={() => setShowSecondaryMenu(false)}
         >
           <ul role="listbox">
@@ -99,7 +99,7 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
               return (
                 <li key={uid}>
                   <button
-                    className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
+                    className="context-menu__item"
                     onClick={() => actionHandler()}
                   >
                     {value}

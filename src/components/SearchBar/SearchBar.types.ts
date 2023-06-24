@@ -1,9 +1,9 @@
 /**
- * DocumentPreview component props.
+ * SearchBar component props.
  *
  * @param {string} className - Custom className.
  */
-export interface DocumentPreviewProps {
+export interface SearchBarProps {
   /** Custom className. */
   className?: string;
 }

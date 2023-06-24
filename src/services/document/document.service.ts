@@ -1,5 +1,6 @@
 import { auth, db } from "@/config/firebase.config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, where, query } from "firebase/firestore";
+import { setDoc, getDoc, getDocs, collection } from "firebase/firestore";
 import { WriteDocumentPayload } from "./document.services.types";
 
 export const updateDocument = async (
@@ -45,6 +46,25 @@ export const getDocument = async (uid: string) => {
     const docRef = doc(db, "documents", uid);
     const docSnap = await getDoc(docRef);
     return docSnap.data();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getDocumentsInWorkspace = async (workspaceId: string) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not authenticated");
+
+    const docsRef = collection(db, "documents");
+    const q = query(docsRef, where("workspaceId", "==", workspaceId));
+
+    const querySnapshot = await getDocs(q);
+    const docsData = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+    }));
+
+    return docsData;
   } catch (e) {
     console.log(e);
   }
