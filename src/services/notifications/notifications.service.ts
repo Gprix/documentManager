@@ -14,7 +14,10 @@ export const writeNotification = async (payload: WriteNotificationPayload) => {
       uid,
       isRead: false,
       destination: payload.destination ?? [user.uid],
+<<<<<<< HEAD
       createdAt: new Date()
+=======
+>>>>>>> cd82156 (fix(global): split function newAction())
     });
 
     return uid;

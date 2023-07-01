@@ -7,7 +7,6 @@
  * @property {string} type - Notification type
  * @property {boolean} isRead - Notification read status
  * @property {string[]} destination - Notification destination uids
- * @property {Date} createdAt - Notification creation date
  */
 export interface Notification {
   uid: string;
@@ -15,5 +14,8 @@ export interface Notification {
   type: "success" | "error" | "warning" | "info";
   isRead: boolean;
   destination: string[];
+<<<<<<< HEAD
   createdAt: Date;
+=======
+>>>>>>> cd82156 (fix(global): split function newAction())
 }
