@@ -28,7 +28,7 @@ body {
 
   /* Sidebar */
   .Sidebar {
-    @apply bg-primary h-full w-[10%] flex flex-col justify-between items-center pb-8 pt-4 px-2;
+    @apply h-full w-[10%] flex flex-col justify-between items-center pb-8 pt-4 px-2;
   }
 
   .Sidebar__element {
@@ -40,16 +40,8 @@ body {
   }
 
   /* Documents */
-  .Documents {
-    @apply p-4;
-  }
-
-  .Documents__title {
-    @apply text-2xl font-bold mb-2;
-  }
-
   .Documents__subtitle {
-    @apply text-xl font-medium;
+    @apply text-xl font-medium ml-6 mt-6 mb-3;
   }
 
   .Documents__search {
@@ -66,5 +58,9 @@ body {
 
   .no-focus-outline {
     @apply focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0;
+  }
+
+  .context-menu__item {
+    @apply w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150;
   }
 }

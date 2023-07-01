@@ -1,10 +1,9 @@
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { Modal } from "../shared/Modal/Modal";
-import { TemplatesList } from "../TemplateList/TemplateList";
 import { usePathname } from "next/navigation";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
-import { ProtocolTemplate } from "@/services/template/template.service.types";
+import { Template } from "@/services/template/template.service.types";
 import Link from "next/link";
 import Image from "next/image";
 import { SideBarProps } from "./SideBar.types";
@@ -25,14 +24,15 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   const [photoURL, setPhotoURL] = useState("");
 
   const newDocumentModal = useMemo(() => {
-    const availableProtocols: ProtocolTemplate[] = [
+    const availableProtocols: Template[] = [
       {
-        id: "1",
+        uid: "1",
         workspaceId: "1",
         authorId: "1",
         name: "Rectificación de partida",
-        templateData: "",
+        templateData: [],
         enabled: true,
+        documentType: "protocol",
       },
     ];
 
@@ -48,7 +48,6 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
           <p className="text-sm text-dimmed mb-4">
             {availableProtocols.length} proceso(s) disponible(s)
           </p>
-          <TemplatesList templates={availableProtocols} />
         </section>
         <section className="mt-20">
           <h3 className="font-medium">Actas extra-protocolares</h3>

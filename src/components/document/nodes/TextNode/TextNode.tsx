@@ -1,24 +1,48 @@
 "use client";
 
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useLayoutEffect, useState } from "react";
 import { BaseNode } from "../BaseNode/BaseNode";
 import { TextNodeProps } from "./TextNode.types";
 import { SecondaryMenu } from "@/components/shared/SecondaryMenu/SecondaryMenu";
 import { TextType } from "./TextNode.types";
+import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const TextNode = (props: TextNodeProps) => {
   const { className = "" } = props;
+  const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
-  const [nodeStyle, setNodeStyle] = useState<TextType>("h1");
+  const [nodeStyle, setNodeStyle] = useState<TextType>("span");
+  const [value, setValue] = useState("");
+  const { selectedDocument } = useDocument();
+
+  useLayoutEffect(() => {
+    if (!selectedDocument) return;
+  }, [selectedDocument]);
 
   const secondaryMenuOptions = [
     {
-      name: "(h1) Título",
+      name: "Título",
       action: () => setNodeStyle("h1"),
     },
     {
-      name: "(p) Párrafo",
+      name: "Subtítulo",
+      action: () => setNodeStyle("h2"),
+    },
+    {
+      name: "Sección",
+      action: () => setNodeStyle("h3"),
+    },
+    {
+      name: "Texto",
+      action: () => setNodeStyle("span"),
+    },
+    {
+      name: "Texto largo",
+      action: () => setNodeStyle("longText"),
+    },
+    {
+      name: "Párrafo",
       action: () => setNodeStyle("p"),
     },
   ];
@@ -26,6 +50,29 @@ export const TextNode = (props: TextNodeProps) => {
   const changeStyleHandler = (e: MouseEvent<HTMLButtonElement>) => {
     setOrigin({ x: e.pageX, y: e.pageY });
     setShowSecondaryMenu(true);
+  };
+
+  // Retrieve and set data
+  useLayoutEffect(() => {
+    if (!data) return;
+
+    const { style, value } = data;
+    setNodeStyle(style);
+    setValue(value);
+  }, [data]);
+
+  const handleUpdate = (updatedValue: string) => {
+    if (!onNodeUpdate) return;
+    if (!selectedDocument) return;
+
+    onNodeUpdate({
+      inlineIndex,
+      rowIndex,
+      isFullLine: false,
+      type: "text",
+      style: nodeStyle,
+      value: updatedValue,
+    });
   };
 
   return (
@@ -38,6 +85,11 @@ export const TextNode = (props: TextNodeProps) => {
           {nodeStyle}
         </button>
         <input
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            handleUpdate(e.target.value);
+          }}
           type="text"
           placeholder="Lorem ipsum..."
           className="font-light text-black text-sm no-focus-outline w-full bg-transparent border-b border-black mb-1"
@@ -46,7 +98,7 @@ export const TextNode = (props: TextNodeProps) => {
       {showSecondaryMenu ? (
         <SecondaryMenu
           top={origin.y}
-          left={origin.x}
+          left={origin.x - 140}
           onDismiss={() => setShowSecondaryMenu(false)}
         >
           <ul role="listbox">
@@ -61,7 +113,7 @@ export const TextNode = (props: TextNodeProps) => {
               return (
                 <li key={name}>
                   <button
-                    className="w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150"
+                    className="context-menu__item"
                     onClick={() => actionHandler()}
                   >
                     {name}
