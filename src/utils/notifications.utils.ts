@@ -1,9 +1,6 @@
 import { writeNotification } from "@/services/notifications/notifications.service";
 import { ToastOptions, toast } from "react-toastify";
 
-import { CONSTANTS } from "@/config/constants";
-const { LOG_NOTIFICATIONS } = CONSTANTS.LOGGERS;
-
 const options: ToastOptions = {
   position: "top-center",
   autoClose: 5000,
@@ -20,8 +17,7 @@ export const createInfoNotification = async (
   destination?: string[]
 ) => {
   toast.info(message, options);
-  LOG_NOTIFICATIONS &&
-    writeNotification({ type: "info", description: message, destination });
+  writeNotification({ type: "info", description: message, destination });
 };
 
 export const createSuccessNotification = async (
@@ -29,8 +25,7 @@ export const createSuccessNotification = async (
   destination?: string[]
 ) => {
   toast.success(message, options);
-  LOG_NOTIFICATIONS &&
-    writeNotification({ type: "success", description: message, destination });
+  writeNotification({ type: "success", description: message, destination });
 };
 
 export const createErrorNotification = async (
@@ -38,8 +33,7 @@ export const createErrorNotification = async (
   destination?: string[]
 ) => {
   toast.error(message, options);
-  LOG_NOTIFICATIONS &&
-    writeNotification({ type: "error", description: message, destination });
+  writeNotification({ type: "error", description: message, destination });
 };
 
 export const createWarningNotification = async (
@@ -47,6 +41,5 @@ export const createWarningNotification = async (
   destination?: string[]
 ) => {
   toast.warning(message, options);
-  LOG_NOTIFICATIONS &&
-    writeNotification({ type: "warning", description: message, destination });
+  writeNotification({ type: "warning", description: message, destination });
 };
