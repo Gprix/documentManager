@@ -8,12 +8,15 @@ import { useRouter } from "next/navigation";
 export const DocumentPreview = (props: DocumentPreviewProps) => {
   const { className = "" } = props;
   const { documentType, documentName, documentId } = props;
-  const { previewNodes, action } = props;
+  const { previewNodes, action, isTemplate } = props;
   const isProtocol = documentType === "protocol";
   const { push } = useRouter();
   const { selectedDatablocks } = useDatablocks();
-  const defaultAction =
-    action ?? (() => push(`/workspace/workshop/${documentId}`));
+  const to = `/workspace/workshop/${documentId}${
+    isTemplate ? "?isTemplate=true" : ""
+  }`;
+
+  const defaultAction = action ?? (() => push(to));
 
   return (
     <div>

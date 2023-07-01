@@ -36,7 +36,9 @@ export const writeTemplate = async (payload: WriteTemplatePayload) => {
     });
 
     return uid;
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getTemplatesInWorkspace = async (workspaceId: string) => {

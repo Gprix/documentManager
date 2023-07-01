@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { db } from "@/config/firebase.config";
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc } from "firebase/firestore";
 
 const SchedulePage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);
