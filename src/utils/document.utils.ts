@@ -12,6 +12,10 @@ export const getPreviewNodesUtility = (
   limit: number = 10
 ) =>
   documentData
-    .sort((a, b) => a.rowIndex - b.rowIndex)
-    .sort((a, b) => a.inlineIndex - b.inlineIndex)
+    .sort((a, b) => {
+      if (a.rowIndex === b.rowIndex) {
+        return a.inlineIndex - b.inlineIndex; // Sort by inlineIndex if rowIndex is the same
+      }
+      return a.rowIndex - b.rowIndex; // Sort by rowIndex
+    })
     .slice(0, limit);
