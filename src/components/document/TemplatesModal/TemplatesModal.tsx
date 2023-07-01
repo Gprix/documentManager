@@ -32,7 +32,6 @@ export const TemplatesModal = (props: TemplatesModalProps) => {
         withNewAction
         newActionLabel="Nueva plantilla"
         isTemplate
-        mode="new"
       />
 
       <SearchBar />

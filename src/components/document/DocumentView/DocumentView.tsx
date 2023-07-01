@@ -17,6 +17,8 @@ import { DocumentToolbox } from "../DocumentToolbox/DocumentToolbox";
 import { getTemplate } from "@/services/template/template.service";
 import { updateTemplate } from "@/services/template/template.service";
 import { WriteTemplatePayload } from "@/services/template/template.service.types";
+// import { doc, setDoc } from "@firebase/firestore";
+// import { db } from "@/config/firebase.config";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
@@ -128,7 +130,7 @@ export const DocumentView = (props: DocumentViewProps) => {
         >
           <Paper
             document={{ ...selectedDocument } as Document}
-            className={`text-black mb-32 transition-all duration-150 ${
+            className={`text-black mb-64 transition-all duration-150 ${
               isEditing
                 ? "bg-white rounded-xl mx-32 mt-8"
                 : "bg-[#f9f9f9] rounded-none"
@@ -144,7 +146,39 @@ export const DocumentView = (props: DocumentViewProps) => {
           {/* <Button
             className="mr-4 mb-32"
             rightIcon={DropdownArrowWhiteSVG}
-            onClick={() => setShowDataCaptureModal(!showDataCaptureModal)}
+            // onClick={() => setShowDataCaptureModal(!showDataCaptureModal)}
+            onClick={() => {
+              const testWriteDataBlock = async () => {
+                const values = [
+                  "Son",
+                  "Es",
+                  "Mayor de edad",
+                  "Hábil para contratar",
+                  "Inteligente en el idioma castellano",
+                  "Procede con libertad, capacidad y conocimiento suficiente",
+                  "De lo que doy fe",
+                  "Y",
+                ];
+
+                try {
+                  values.forEach(async (value) => {
+                    const uid = crypto.randomUUID();
+
+                    await setDoc(doc(db, "datablocks", uid), {
+                      authorId: "AtnCKk4MQEYIbQOftB7d8lVFI3o2",
+                      workspaceId: "1a56661e-c1f3-4b57-9db5-dfd4ee08db19",
+                      uid: uid,
+                      value: value,
+                    });
+                    console.log("Data block added:", value);
+                  });
+                } catch (e) {
+                  console.log("Error adding datablock: ", e);
+                }
+              };
+
+              testWriteDataBlock();
+            }}
           >
             Capturar datos
           </Button> */}

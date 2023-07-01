@@ -1,20 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { app, db } from "@/config/firebase.config";
-import { collection, addDoc, getDocs, doc } from "firebase/firestore";
-import {
-  format,
-  parse,
-  startOfToday,
-  eachDayOfInterval,
-  endOfMonth,
-  add,
-  isSameMonth,
-  isToday,
-  getDay,
-  setHours,
-} from "date-fns";
+import { db } from "@/config/firebase.config";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { add, parse, format, getDay, isToday } from "date-fns";
+import { endOfMonth, isSameMonth, startOfToday } from "date-fns";
+import { eachDayOfInterval } from "date-fns";
 
 const SchedulePage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);
@@ -43,7 +34,6 @@ const SchedulePage = () => {
     }
 
     getDocuments();
-
   }, []);
 
   const getDocuments = async () => {
@@ -58,20 +48,19 @@ const SchedulePage = () => {
     // }
 
     const querySnapshot = await getDocs(collection(db, "appointments"));
-    
+
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log( doc.data().clientName, " ", doc.data().date);
+      console.log(doc.data().clientName, " ", doc.data().date);
       //@ts-ignore
       setClientNames((prev) => [...prev, doc.data().clientName]);
-      let dias = new Date(doc.data().date)
+      let dias = new Date(doc.data().date);
       dias.setDate(dias.getDate() + 1);
       //@ts-ignore
       setAppointments((prev) => [...prev, dias.toDateString()]);
       //@ts-ignore
       setSelectedHour((prev) => [...prev, doc.data().time]);
     });
-    
   };
 
   const handleDateClick = () => {
@@ -260,7 +249,6 @@ const SchedulePage = () => {
     );
   };
 
-
   const renderAppointment = (title: string, hour: string) => {
     return (
       <button className="flex border border-solid border-green-500 rounded-lg flex-col justify-center items-center w-full h-full mt-4 ">
@@ -284,27 +272,32 @@ const SchedulePage = () => {
     }
 
     const ordenarPorHora = (citaA: Object, citaB: Object) => {
-      const horaA = citaA.hour.split(':')[0];
-      const minutoA = citaA.hour.split(':')[1];
-      const horaB = citaB.hour.split(':')[0];
-      const minutoB = citaB.hour.split(':')[1];
-    
+      const horaA = citaA.hour.split(":")[0];
+      const minutoA = citaA.hour.split(":")[1];
+      const horaB = citaB.hour.split(":")[0];
+      const minutoB = citaB.hour.split(":")[1];
+
       if (horaA === horaB) {
         return minutoA.localeCompare(minutoB);
       }
-    
+
       return horaA.localeCompare(horaB);
     };
 
     return (
       <div className="flex flex-row w-full h-full gap-2">
         {days.map((date) => {
-
-          const citas = appointments.map((fecha, indice) => ({ fecha, indice, hour: selectedHour[indice]})).filter((fecha) => fecha.fecha == date.toDateString())
+          const citas = appointments
+            .map((fecha, indice) => ({
+              fecha,
+              indice,
+              hour: selectedHour[indice],
+            }))
+            .filter((fecha) => fecha.fecha == date.toDateString());
 
           const citasOrdenadas = citas.sort(ordenarPorHora);
 
-          citas.map(cita => console.log(cita.fecha, " => ", cita.indice))
+          citas.map((cita) => console.log(cita.fecha, " => ", cita.indice));
           return (
             <div className="flex-grow h-[60vh]">
               <div className="flex justify-center mb-3 font-bold">
@@ -332,7 +325,12 @@ const SchedulePage = () => {
                   )}
                 </div>
                 <div>
-                  {citasOrdenadas.map((cita) => renderAppointment(clientNames[cita.indice], selectedHour[cita.indice]))}
+                  {citasOrdenadas.map((cita) =>
+                    renderAppointment(
+                      clientNames[cita.indice],
+                      selectedHour[cita.indice]
+                    )
+                  )}
                 </div>
               </div>
             </div>

@@ -134,10 +134,9 @@ const DocumentsPage = () => {
         <div className="relative">
           <DocumentActions
             templateList={selectedTemplates ?? []}
-            className="pt-6"
+            className="pt-16"
             withNewAction
             newActionLabel="Nueva acta"
-            mode="new"
           />
           <div className="absolute top-0 right-0">
             <p className="text-dimmed text-sm text-right pr-4 pt-3">
