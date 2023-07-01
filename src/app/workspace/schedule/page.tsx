@@ -151,11 +151,6 @@ const schedulePage = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> c2a0b36 (Fix email services)
   const handlerEmail = (event: React.MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
 

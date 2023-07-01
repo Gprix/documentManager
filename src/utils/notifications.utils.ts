@@ -1,9 +1,12 @@
 import { writeNotification } from "@/services/notifications/notifications.service";
 import { ToastOptions, toast } from "react-toastify";
 
+<<<<<<< HEAD
 import { CONSTANTS } from "@/config/constants";
 const { LOG_NOTIFICATIONS } = CONSTANTS.LOGGERS;
 
+=======
+>>>>>>> 2c26ece (fix(global): split function newAction())
 const options: ToastOptions = {
   position: "top-center",
   autoClose: 5000,
@@ -20,8 +23,12 @@ export const createInfoNotification = async (
   destination?: string[]
 ) => {
   toast.info(message, options);
+<<<<<<< HEAD
   LOG_NOTIFICATIONS &&
     writeNotification({ type: "info", description: message, destination });
+=======
+  writeNotification({ type: "info", description: message, destination });
+>>>>>>> 2c26ece (fix(global): split function newAction())
 };
 
 export const createSuccessNotification = async (
