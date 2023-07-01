@@ -1,9 +1,11 @@
 "use client";
 
 import "@/styles/globals.css";
-import { Inter } from "next/font/google";
+import { Pathway_Extreme } from "next/font/google";
 import AppProviders from "./providers";
 import useListeners from "@/hooks/useListeners";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
