@@ -7,6 +7,10 @@ import { format, parse, startOfToday, add } from "date-fns";
 import CalendarWeek from "@/components/calendar/calendarWeek";
 import CalendarMonth from "@/components/calendar/calendarMonth";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b074bf5 (Add calendar components)
 const schedulePage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);
   const [eventData, setEventData] = useState<Object>({
@@ -40,11 +44,14 @@ const schedulePage = () => {
   const getDocuments = async () => {
     const querySnapshot = await getDocs(collection(db, "appointments"));
 
+
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.data().clientName, " ", doc.data().date);
+      console.log(doc.data().clientName, " ", doc.data().date);
       //@ts-ignore
       setClientNames((prev) => [...prev, doc.data().clientName]);
+      let dias = new Date(doc.data().date);
       let dias = new Date(doc.data().date);
       dias.setDate(dias.getDate() + 1);
       //@ts-ignore
