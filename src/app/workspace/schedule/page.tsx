@@ -23,6 +23,7 @@ const schedulePage = () => {
   const today = startOfToday();
   const [currMonth, setCurrMonth] = useState(() => format(today, "MMM-yyyy"));
   const [startDate, setStartDate] = useState(new Date());
+  const [isRecurrent, setIsRecurrent] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -154,53 +155,112 @@ const schedulePage = () => {
   const renderEventForm = () => {
     return (
       <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md w-[50vw] h-[50vh]">
-          <div className="flex justify-between items-center px-4 py-2">
-            <h2 className="text-xl font-semibold">Eventos</h2>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md w-[40vw] h-[90vh]">
+          <div className="flex justify-between items-center px-4 pt-4">
+            <h2 className="text-xl font-semibold">Programar cita</h2>
             <button
               className="text-2xl font-semibold text-gray-500 hover:text-gray-700"
-              onClick={() => setModal(false)}
+              onClick={() => {
+                setModal(false);
+                setEventData({
+                  clientName: "",
+                  date: "",
+                  time: null,
+                  description: "",
+                });
+                setIsRecurrent(false);
+              }}
             >
               X
             </button>
           </div>
           <form
-            className="flex items-start flex-col px-10 pt-10 space-y-10 w-full"
+            className="flex items-start flex-col px-10 pt-5 space-y-5 w-full"
             onSubmit={handleSubmit}
           >
-            <div className="flex w-full">
-              <label className="w-1/3 flex items-center">Nombre Cliente:</label>
-              <input
-                className="border-2 border-gray-300 rounded-md px-2  w-full"
-                type="text"
-                name="clientName"
-                // @ts-ignore
-                value={eventData.clientName}
-                onChange={handleChangeForm}
-              />
+            <div className="flex flex-col w-full">
+              <div className="text-m">Asignar a</div>
+              <div className="flex items-center gap-4 w-full px-2 pt-2">
+                {/* imagen en un circulo y el nombre al lado de este */}
+                <img
+                  className="w-8 h-8 rounded-full border-solid border-2 border-[#2A2A2A]"
+                  src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"
+                  alt="profile"
+                />
+                <div>Dr. Prieto Rocas</div>
+              </div>
+            </div>
+            <div className="flex flex-col w-full">
+              <div className="text-m m-2">Cliente(s)</div>
+              <div className="flex flex-col items-center gap-4 w-full px-2 py-1">
+                <div className="flex w-full">
+                  <label className="w-1/3 flex items-center">Nombre:</label>
+                  <input
+                    className="border-2 border-gray-300 rounded-md px-2  w-full"
+                    type="text"
+                    name="clientName"
+                    // @ts-ignore
+                    value={eventData.clientName}
+                    onChange={handleChangeForm}
+                  />
+                </div>
+                <div className="flex w-full">
+                  <label className="w-1/3 flex items-center">Documento:</label>
+                  <input
+                    className="border-2 border-gray-300 rounded-md px-2  w-full"
+                    type="text"
+                    name="clientDocument"
+                    // @ts-ignore
+                    value={eventData.clientDocument}
+                    onChange={handleChangeForm}
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="flex w-full">
-              <label className="w-1/4 flex items-center">Fecha:</label>
-              <input
-                className="border-2 border-gray-300 rounded-md px-2  w-full"
-                type="date"
-                name="date"
-                // @ts-ignore
-                value={eventData.date}
-                onChange={handleChangeForm}
-              />
-
-              <label className="w-1/4 flex items-center pl-3">Hora:</label>
-              <input
-                className="border-2 border-gray-300 rounded-md px-2  w-full"
-                type="time"
-                name="time"
-                // @ts-ignore
-                value={eventData.time}
-                onChange={handleChangeForm}
-              />
+            <div className="flex flex-col w-full">
+              <div>Fecha y Hora</div>
+              <div className="flex w-full mt-1 gap-2">
+                <input
+                  className="border-2 border-gray-300 rounded-md px-2  w-full"
+                  type="date"
+                  name="date"
+                  // @ts-ignore
+                  value={eventData.date}
+                  onChange={handleChangeForm}
+                />
+                <input
+                  className="border-2 border-gray-300 rounded-md px-2  w-full"
+                  type="time"
+                  name="time"
+                  // @ts-ignore
+                  value={eventData.time}
+                  onChange={handleChangeForm}
+                />
+              </div>
+              <div className="flex w-full gap-2 mt-1 mx-3">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="recurrente"
+                    checked={isRecurrent}
+                    onChange={() => setIsRecurrent(!isRecurrent)}
+                  />{" "}
+                  Recurrente
+                </label>
+                {isRecurrent && (
+                  <div>
+                    <input
+                      className="border-2 border-gray-300 rounded-md px-2  w-full"
+                      type="number"
+                      name="recurrences"
+                      min="0"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className="flex w-full">
               <label className="w-1/4 flex items-center">Descripcion:</label>
               <input
@@ -212,12 +272,26 @@ const schedulePage = () => {
                 onChange={handleChangeForm}
               />
             </div>
-            <button
-              className=" bg-[#FF4D84] px-2 rounded-md text-[#FAFAFA] text-2l p-2"
-              type="submit"
-            >
-              Save Event
-            </button>
+
+            <div className="flex w-full justify-between">
+              <input
+                type="button"
+                className=" px-2 rounded-md underline text-2l p-2 cursor-pointer"
+                value="Cancelar"
+                onClick={() => {
+                  setModal(false);
+                  setEventData({});
+                  setIsRecurrent(false);
+                }}
+              />
+
+              <button
+                className=" bg-[#FF4D84] px-2 rounded-md text-[#FAFAFA] text-2l p-2"
+                type="submit"
+              >
+                Guardar cita
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -297,6 +371,7 @@ const schedulePage = () => {
         </button>
       </div>
       <div className={`flex gap-4 wrap ${!modalFlag ? "hidden" : ""}`}>
+        {/* putt hidden in the first conditional */}
         {renderEventForm()}
       </div>
     </section>
