@@ -339,13 +339,17 @@ const schedulePage = () => {
           <div className="flex items-center gap-4">
             <button
               className="cursor-pointer font-bold"
-              onClick={handlePrevEvent}
+              onClick={() => {
+                handlePrevEvent;
+              }}
             >
               &lt;
             </button>
             <button
               className="cursor-pointer font-bold"
-              onClick={handleNextEvent}
+              onClick={() => {
+                handleNextEvent;
+              }}
             >
               &gt;
             </button>
