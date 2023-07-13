@@ -8,12 +8,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { SideBarProps } from "./SideBar.types";
 
-import logo from "../../../public/images/logo-black.svg";
-import CalendarSVG from "../../../public/images/icons/calendar.svg";
-import DocPageSVG from "../../../public/images/icons/doc-page.svg";
-import NotificationsSVG from "../../../public/images/icons/notifications.svg";
 import { getMember } from "@/services/member/member.service";
 import { Member } from "@/services/member/member.service.types";
+
+import logo from "images/logo-black.svg";
+import CalendarSVG from "images/icons/calendar.svg";
+import DiscSVG from "images/icons/disc.svg";
+import DocPageSVG from "images/icons/doc-page.svg";
+import NotificationsSVG from "images/icons/notifications.svg";
 
 const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   const { addPeekComponent } = props;
@@ -112,23 +114,19 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
           #{selectedWorkspace?.uid}
         </p>
       </div>
-      <div className="flex flex-col gap-y-2">
-        {/* // TODO: define REAL interactive button */}
-        <button
-          className="rounded-full px-4 py-2 bg-black text-white mx-auto"
-          onClick={() => handleToggleInteractiveButton()}
-        >
-          +
-        </button>
+      <div className="flex flex-col gap-y-8">
         <Link href="/workspace/schedule" className="Sidebar__element">
-          <Image src={CalendarSVG} alt="" />
+          <Image src={CalendarSVG} alt="schedule" />
         </Link>
         <Link href="/workspace/documents" className="Sidebar__element">
-          <Image src={DocPageSVG} alt="" />
+          <Image src={DocPageSVG} alt="documents" />
         </Link>
         <div className="Sidebar__element">
           <Image src={NotificationsSVG} alt="" />
         </div>
+        <Link href="/workspace/backup" className="Sidebar__element">
+          <Image src={DiscSVG} alt="backup" />
+        </Link>
       </div>
       {renderProfilePreview()}
     </aside>

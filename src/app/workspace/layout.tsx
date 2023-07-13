@@ -5,12 +5,12 @@ import { useAuth } from "@/contexts/auth/auth.context.hooks";
 import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
 import { useTemplates } from "@/contexts/templates/templates.context.hooks";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
-import { Workspace } from "@/contexts/workspace/workspace.context.types";
 import { getDatablocksInWorkspace } from "@/services/datablocks/datablocks.service";
 import { DataBlock } from "@/services/datablocks/datablocks.service.types";
 import { getTemplatesInWorkspace } from "@/services/template/template.service";
 import { Template } from "@/services/template/template.service.types";
 import { getWorkspace } from "@/services/workspace/workspace.service";
+import { Workspace } from "@/services/workspace/workspace.service.types";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useMemo, useState, useRef } from "react";
 
