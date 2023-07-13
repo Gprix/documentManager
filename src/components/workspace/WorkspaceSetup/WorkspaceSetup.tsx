@@ -7,10 +7,10 @@ import Button from "@/components/shared/Button/Button";
 import GAccountDropdown from "@/components/GAccountDropdown/GAccountDropdown";
 import { useRouter } from "next/navigation";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
-import { Workspace } from "@/contexts/workspace/workspace.context.types";
 import { writeWorkspace } from "@/services/workspace/workspace.service";
 import { useLayoutEffect } from "react";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
+import { Workspace } from "@/services/workspace/workspace.service.types";
 
 const WorkspaceSetup = (props: WorkspaceSetupProps) => {
   const { push } = useRouter();
