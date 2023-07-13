@@ -38,21 +38,8 @@
     "typescript": "5.1.3"
   },
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@types/nodemailer": "^6.4.8",
-<<<<<<< HEAD
-    "@types/pako": "^2.0.0",
-=======
-<<<<<<< HEAD
->>>>>>> 2c26ece (fix(global): split function newAction())
-=======
     "@types/nodemailer": "^6.4.8",
     "@types/pako": "^2.0.0",
->>>>>>> ad7f257 (feat(global): add backup service)
-=======
->>>>>>> 0318d99 (fix(global): split function newAction())
->>>>>>> cd82156 (fix(global): split function newAction())
     "prettier": "^2.8.8"
   }
 }
