@@ -12,8 +12,10 @@
 export interface Notification {
   uid: string;
   description: string;
-  type: "success" | "error" | "warning" | "info";
+  type: NotificationType;
   isRead: boolean;
   destination: string[];
-  createdAt: Date;
+  createdAt: string;
 }
+
+export type NotificationType = "success" | "error" | "warning" | "info";
