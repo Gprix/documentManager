@@ -14,6 +14,7 @@ export const writeNotification = async (payload: WriteNotificationPayload) => {
       uid,
       isRead: false,
       destination: payload.destination ?? [user.uid],
+      createdAt: new Date(),
     });
 
     return uid;

@@ -1,10 +1,5 @@
+import { Workspace } from "@/services/workspace/workspace.service.types";
 import { Dispatch, SetStateAction } from "react";
-
-export interface Workspace {
-  uid: string;
-  name: string;
-  ownerUid: string;
-}
 
 export interface WorkspaceContextProviderProps {
   children: React.ReactNode;
