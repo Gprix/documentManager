@@ -57,9 +57,9 @@ const HomePage = () => {
               >
                 Continuar con Google
               </Button>
-              <Button type="outline" textStyle="text-white">
+              {/* <Button type="outline" textStyle="text-white">
                 Continuar con correo electrónico
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

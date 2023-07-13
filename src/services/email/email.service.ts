@@ -1,7 +1,6 @@
 import { EnviarCorreoFunction } from "./email.service.types";
 import nodemailer from "nodemailer";
 
-
 const enviarCorreo: EnviarCorreoFunction = async (opciones) => {
   try {
     const { destinatario, asunto, mensaje, remitente, contraseña } = opciones;
