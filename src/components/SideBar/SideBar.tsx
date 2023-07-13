@@ -1,9 +1,9 @@
-import { forwardRef, useEffect, useMemo, useState } from "react";
-import { Modal } from "../shared/Modal/Modal";
-import { usePathname } from "next/navigation";
+import { forwardRef, useEffect, /*useMemo,*/ useState } from "react";
+// import { Modal } from "../shared/Modal/Modal";
+// import { usePathname } from "next/navigation";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
-import { Template } from "@/services/template/template.service.types";
+// import { Template } from "@/services/template/template.service.types";
 import Link from "next/link";
 import Image from "next/image";
 import { SideBarProps } from "./SideBar.types";
@@ -18,48 +18,48 @@ import DocPageSVG from "images/icons/doc-page.svg";
 import NotificationsSVG from "images/icons/notifications.svg";
 
 const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
-  const { addPeekComponent } = props;
-  const { closePeekComponent = () => {} } = props;
-  const pathname = usePathname();
+  // const { addPeekComponent } = props;
+  // const { closePeekComponent = () => {} } = props;
+  // const pathname = usePathname();
   const { selectedWorkspace } = useWorkspace();
   const { uid } = useAuth();
   const [photoURL, setPhotoURL] = useState("");
 
-  const newDocumentModal = useMemo(() => {
-    const availableProtocols: Template[] = [
-      {
-        uid: "1",
-        workspaceId: "1",
-        authorId: "1",
-        name: "Rectificación de partida",
-        templateData: [],
-        enabled: true,
-        documentType: "protocol",
-      },
-    ];
+  // const newDocumentModal = useMemo(() => {
+  //   const availableProtocols: Template[] = [
+  //     {
+  //       uid: "1",
+  //       workspaceId: "1",
+  //       authorId: "1",
+  //       name: "Rectificación de partida",
+  //       templateData: [],
+  //       enabled: true,
+  //       documentType: "protocol",
+  //     },
+  //   ];
 
-    return (
-      <Modal
-        className="NewDocumentModal centered-relative text-black px-12"
-        onClose={closePeekComponent}
-      >
-        <h2 className="font-medium text-xl mt-8 mb-6">Nuevo documento</h2>
-        {/* Search bar aquí*/}
-        <section className="mt-4">
-          <h3 className="font-medium">Actas protocolares</h3>
-          <p className="text-sm text-dimmed mb-4">
-            {availableProtocols.length} proceso(s) disponible(s)
-          </p>
-        </section>
-        <section className="mt-20">
-          <h3 className="font-medium">Actas extra-protocolares</h3>
-          <p className="text-sm text-dimmed mb-4">
-            {0} proceso(s) disponible(s)
-          </p>
-        </section>
-      </Modal>
-    );
-  }, [closePeekComponent]);
+  //   return (
+  //     <Modal
+  //       className="NewDocumentModal centered-relative text-black px-12"
+  //       onClose={closePeekComponent}
+  //     >
+  //       <h2 className="font-medium text-xl mt-8 mb-6">Nuevo documento</h2>
+  //       {/* Search bar aquí*/}
+  //       <section className="mt-4">
+  //         <h3 className="font-medium">Actas protocolares</h3>
+  //         <p className="text-sm text-dimmed mb-4">
+  //           {availableProtocols.length} proceso(s) disponible(s)
+  //         </p>
+  //       </section>
+  //       <section className="mt-20">
+  //         <h3 className="font-medium">Actas extra-protocolares</h3>
+  //         <p className="text-sm text-dimmed mb-4">
+  //           {0} proceso(s) disponible(s)
+  //         </p>
+  //       </section>
+  //     </Modal>
+  //   );
+  // }, [closePeekComponent]);
 
   const renderProfilePreview = () => {
     return (
@@ -90,7 +90,7 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   }, [uid]);
 
   return (
-    <aside className="Sidebar min-w-[144px]" id="sidebar">
+    <aside className="Sidebar min-w-[144px] shadow" id="sidebar">
       <div className="Sidebar__information text-center">
         <div className="Sidebar__information__logo hover:cursor-pointer">
           <Link href="/workspace">
