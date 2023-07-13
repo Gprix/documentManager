@@ -7,6 +7,7 @@
  * @property {string} type - Notification type
  * @property {boolean} isRead - Notification read status
  * @property {string[]} destination - Notification destination uids
+ * @property {Date} createdAt - Notification creation date
  */
 export interface Notification {
   uid: string;
