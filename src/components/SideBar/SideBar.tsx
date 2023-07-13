@@ -63,16 +63,6 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
     );
   }, [closePeekComponent]);
 
-  const handleToggleInteractiveButton = () => {
-    if (!addPeekComponent)
-      throw new Error("No peek components handler provided");
-
-    if (pathname.includes("/documents")) {
-      closePeekComponent();
-      addPeekComponent(newDocumentModal);
-    }
-  };
-
   const renderProfilePreview = () => {
     return (
       <div className="flex flex-col items-center">
