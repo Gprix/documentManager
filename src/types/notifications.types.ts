@@ -15,7 +15,7 @@ export interface Notification {
   type: NotificationType;
   isRead: boolean;
   destination: string[];
-  createdAt: string;
+  createdAt: Date;
 }
 
 export type NotificationType = "success" | "error" | "warning" | "info";
