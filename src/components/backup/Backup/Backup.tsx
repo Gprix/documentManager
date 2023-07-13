@@ -137,31 +137,33 @@ export const Backup = (props: BackupProps) => {
           </select>
         </div>
 
-        <Checkbox
-          customOnChange={handleCheckboxChange}
-          identifier="backup-documents"
-          label="Archivo notarial"
-        />
-        <Checkbox
-          customOnChange={handleCheckboxChange}
-          identifier="backup-appointments"
-          label="Citas"
-        />
-        <Checkbox
-          customOnChange={handleCheckboxChange}
-          identifier="backup-notifications"
-          label="Historial de notificaciones"
-        />
-        <Checkbox
-          customOnChange={handleCheckboxChange}
-          identifier="backup-templates"
-          label="Plantillas notariales"
-        />
-        <Checkbox
-          customOnChange={handleCheckboxChange}
-          identifier="backup-datablocks"
-          label="Bloques de texto"
-        />
+        <div className="bg-white rounded-lg p-4">
+          <Checkbox
+            customOnChange={handleCheckboxChange}
+            identifier="backup-documents"
+            label="Archivo notarial"
+          />
+          <Checkbox
+            customOnChange={handleCheckboxChange}
+            identifier="backup-appointments"
+            label="Citas"
+          />
+          <Checkbox
+            customOnChange={handleCheckboxChange}
+            identifier="backup-notifications"
+            label="Historial de notificaciones"
+          />
+          <Checkbox
+            customOnChange={handleCheckboxChange}
+            identifier="backup-templates"
+            label="Plantillas notariales"
+          />
+          <Checkbox
+            customOnChange={handleCheckboxChange}
+            identifier="backup-datablocks"
+            label="Bloques de texto"
+          />
+        </div>
 
         <Button onClick={() => handleBackup()} className="mt-4 w-full">
           Nueva copia de seguridad
