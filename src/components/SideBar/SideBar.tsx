@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import { Modal } from "../shared/Modal/Modal";
 import { TemplatesList } from "../TemplateList/TemplateList";
@@ -8,9 +9,11 @@ import { forwardRef, useEffect, /*useMemo,*/ useState } from "react";
 // import { Modal } from "../shared/Modal/Modal";
 // import { usePathname } from "next/navigation";
 >>>>>>> a684991 (fix(global): minor fixes)
+=======
+import { forwardRef, useEffect, useState } from "react";
+>>>>>>> 7a31fff (feat(global): add notifications page)
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
-// import { Template } from "@/services/template/template.service.types";
 import Link from "next/link";
 import Image from "next/image";
 import { SideBarProps } from "./SideBar.types";
@@ -25,13 +28,11 @@ import DocPageSVG from "images/icons/doc-page.svg";
 import NotificationsSVG from "images/icons/notifications.svg";
 
 const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
-  // const { addPeekComponent } = props;
-  // const { closePeekComponent = () => {} } = props;
-  // const pathname = usePathname();
   const { selectedWorkspace } = useWorkspace();
   const { uid } = useAuth();
   const [photoURL, setPhotoURL] = useState("");
 
+<<<<<<< HEAD
   // const newDocumentModal = useMemo(() => {
   //   const availableProtocols: Template[] = [
   //     {
@@ -94,6 +95,8 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   // }, [closePeekComponent]);
 >>>>>>> a684991 (fix(global): minor fixes)
 
+=======
+>>>>>>> 7a31fff (feat(global): add notifications page)
   const renderProfilePreview = () => {
     return (
       <div className="flex flex-col items-center">
@@ -144,9 +147,9 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
         <Link href="/workspace/documents" className="Sidebar__element">
           <Image src={DocPageSVG} alt="documents" />
         </Link>
-        <div className="Sidebar__element">
-          <Image src={NotificationsSVG} alt="" />
-        </div>
+        <Link href="/workspace/notifications" className="Sidebar__element">
+          <Image src={NotificationsSVG} alt="notifications" />
+        </Link>
         <Link href="/workspace/backup" className="Sidebar__element">
           <Image src={DiscSVG} alt="backup" />
         </Link>
