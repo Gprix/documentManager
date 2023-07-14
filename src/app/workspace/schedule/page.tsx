@@ -151,6 +151,11 @@ const schedulePage = () => {
     }
   };
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c2a0b36 (Fix email services)
   const handlerEmail = (event: React.MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
 
@@ -158,10 +163,10 @@ const schedulePage = () => {
       target: "andreeg199@gmail.com",
       name: "Usuario",
       from_name: "Docunot",
-      message: "Esto es un mensaje automatico de Document Manager",
+      message: "Esto es un mensaje automatico de Document Manager"
     };
 
-    enviarCorreo(templateParams);
+    enviarCorreo(templateParams)
   };
 
   const renderEventForm = () => {
