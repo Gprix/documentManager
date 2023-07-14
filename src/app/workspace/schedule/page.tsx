@@ -10,8 +10,12 @@ import CalendarMonth from "@/components/calendar/calendarMonth";
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> b074bf5 (Add calendar components)
 const schedulePage = () => {
+=======
+const SchedulePage = () => {
+>>>>>>> a84da64 (Quick fix)
   const [modalFlag, setModal] = useState<boolean>(false);
   const [eventData, setEventData] = useState<Object>({
     clientName: "",
@@ -327,17 +331,13 @@ const schedulePage = () => {
           <div className="flex items-center gap-4">
             <button
               className="cursor-pointer font-bold"
-              onClick={() => {
-                handlePrevEvent;
-              }}
+              onClick={handlePrevEvent}
             >
               &lt;
             </button>
             <button
               className="cursor-pointer font-bold"
-              onClick={() => {
-                handleNextEvent;
-              }}
+              onClick={handleNextEvent}
             >
               &gt;
             </button>
@@ -384,4 +384,4 @@ const schedulePage = () => {
   );
 };
 
-export default schedulePage;
+export default SchedulePage;
