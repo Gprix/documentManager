@@ -7,15 +7,7 @@ import { format, parse, startOfToday, add } from "date-fns";
 import CalendarWeek from "@/components/calendar/calendarWeek";
 import CalendarMonth from "@/components/calendar/calendarMonth";
 
-<<<<<<< HEAD
-=======
-
-<<<<<<< HEAD
->>>>>>> b074bf5 (Add calendar components)
-const schedulePage = () => {
-=======
 const SchedulePage = () => {
->>>>>>> a84da64 (Quick fix)
   const [modalFlag, setModal] = useState<boolean>(false);
   const [eventData, setEventData] = useState<Object>({
     clientName: "",
