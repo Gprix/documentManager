@@ -52,7 +52,6 @@ const schedulePage = () => {
       //@ts-ignore
       setClientNames((prev) => [...prev, doc.data().clientName]);
       let dias = new Date(doc.data().date);
-      let dias = new Date(doc.data().date);
       dias.setDate(dias.getDate() + 1);
       //@ts-ignore
       setAppointments((prev) => [...prev, dias.toDateString()]);
