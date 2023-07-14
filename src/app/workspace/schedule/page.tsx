@@ -6,6 +6,7 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 import { format, parse, startOfToday, add } from "date-fns";
 import CalendarWeek from "@/components/calendar/calendarWeek";
 import CalendarMonth from "@/components/calendar/calendarMonth";
+import enviarCorreo from "@/services/email/email.service";
 
 const schedulePage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);
@@ -41,8 +42,6 @@ const schedulePage = () => {
     const querySnapshot = await getDocs(collection(db, "appointments"));
 
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.data().clientName, " ", doc.data().date);
       //@ts-ignore
       setClientNames((prev) => [...prev, doc.data().clientName]);
       let dias = new Date(doc.data().date);
@@ -56,7 +55,6 @@ const schedulePage = () => {
 
   const handleDateClick = () => {
     setModal(!modalFlag);
-    console.log("Abrir modal para visualizar eventos");
   };
 
   const handlevViewTypeChange = () => {
@@ -150,6 +148,21 @@ const schedulePage = () => {
     } else {
       getPrevMonth();
     }
+  };
+
+
+
+  const handlerEmail = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.preventDefault();
+
+    var templateParams = {
+      target: "andreeg199@gmail.com",
+      name: "Usuario",
+      from_name: "Docunot",
+      message: "Esto es un mensaje automatico de Document Manager"
+    };
+
+    enviarCorreo(templateParams)
   };
 
   const renderEventForm = () => {
@@ -368,6 +381,15 @@ const schedulePage = () => {
           onClick={handleDateClick}
         >
           Añadir
+        </button>
+      </div>
+      <div className="fixed top-[10%] left-[50%]">
+        <button
+          className=" bg-[#FF4D84] px-2 rounded-md text-[#FAFAFA] text-2l p-2"
+          //@ts-ignore
+          onClick={handlerEmail}
+        >
+          Send
         </button>
       </div>
       <div className={`flex gap-4 wrap ${!modalFlag ? "hidden" : ""}`}>
