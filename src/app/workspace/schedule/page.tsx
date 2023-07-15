@@ -10,6 +10,7 @@ import enviarCorreo from "@/services/email/email.service";
 import Link from "next/link";
 
 const schedulePage = () => {
+
   const [modalFlag, setModal] = useState<boolean>(false);
   const [eventData, setEventData] = useState<Object>({
     clientName: "",
@@ -326,6 +327,7 @@ const schedulePage = () => {
       </button>
     );
   };
+
 
   return (
     <section className="m-10 flex-grow">

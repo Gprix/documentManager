@@ -69,9 +69,9 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
         <Link href="/workspace/documents" className="Sidebar__element">
           <Image src={DocPageSVG} alt="documents" />
         </Link>
-        <div className="Sidebar__element">
-          <Image src={NotificationsSVG} alt="" />
-        </div>
+        <Link href="/workspace/notifications" className="Sidebar__element">
+          <Image src={NotificationsSVG} alt="notifications" />
+        </Link>
         <Link href="/workspace/backup" className="Sidebar__element">
           <Image src={DiscSVG} alt="backup" />
         </Link>
