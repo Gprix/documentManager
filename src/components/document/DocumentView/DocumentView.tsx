@@ -22,6 +22,7 @@ import { EditableTextRef } from "@/components/shared/EditableText/EditableText.t
 import { createSuccessNotification } from "@/utils/notifications.utils";
 // import { doc, setDoc } from "@firebase/firestore";
 // import { db } from "@/config/firebase.config";
+import Link from "next/link";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
@@ -70,6 +71,9 @@ export const DocumentView = (props: DocumentViewProps) => {
 
     setIsEditing((prev) => !prev);
   };
+
+  const handlePublishClick = async () => {
+  }
 
   useEffect(() => {
     if (!documentType) return;
@@ -188,6 +192,22 @@ export const DocumentView = (props: DocumentViewProps) => {
                   </p>
                 ) : null}
               </div>
+            </div>
+            <div className="flex items-center  mr-4 ">
+            <Link
+              href='/workspace/publishdocs'
+              className="text-[#FF4D84] underline"
+            >
+              Ver estado
+            </Link>
+            </div>
+            <div className="flex items-center  mr-4 ">
+            <button
+              onClick={handlePublishClick}
+              className="text-[#FF4D84] underline"
+            >
+              Publicar
+            </button>
             </div>
             <Button
               onClick={handleButtonClick}
