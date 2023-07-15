@@ -9,14 +9,16 @@ import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
 
 import Select, { SingleValue } from "react-select";
 import { getLastFromPathname } from "@/utils/common.utils";
+import NewBlockModal from "./NewBlockModal";
 
 export const TextBlockNode = (props: TextBlockNodeProps) => {
-  const { className = "" } = props;
+  const { className = "", editable = true } = props;
   const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const { selectedDocument } = useDocument();
   const { selectedDatablocks } = useDatablocks();
   const [blockEntryId, setBlockEntryId] = useState<string | null>(null);
   const [, setTextValue] = useState("");
+  const [showNewBlockModal, setShowNewBlockModal] = useState(false);
 
   const blocksAsOptions = useMemo(() => {
     return selectedDatablocks?.map((datablock) => ({
@@ -73,10 +75,10 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
   return (
     <>
       <BaseNode
-        className="TextBlockNode overflow-visible !rounded-lg"
+        className={["TextBlockNode", "overflow-visible !rounded-lg"].join(" ")}
         contentClassName={[
-          "hover:bg-gray-200 !rounded-lg",
-          "pl-3 pr-1 pt-2 pb-1",
+          "hover:bg-gray-200",
+          "pl-3 pr-1 pt-2 pb-1 !rounded-lg",
           className,
         ].join(" ")}
       >
@@ -87,6 +89,11 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
           formatOptionLabel={(option) => getLastFromPathname(option.label)}
           options={blocksAsOptions}
           isSearchable
+          noOptionsMessage={() => (
+            <span onClick={() => setShowNewBlockModal(true)}>
+              + Agregar nuevo bloque de texto
+            </span>
+          )}
           onChange={(option) => handleUpdate(option)}
           className="text-sm font-light"
           styles={{
@@ -109,6 +116,9 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
           }}
         />
       </BaseNode>
+      {showNewBlockModal ? (
+        <NewBlockModal onClose={() => setShowNewBlockModal(false)} />
+      ) : null}
     </>
   );
 };

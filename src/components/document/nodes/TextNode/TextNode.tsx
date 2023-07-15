@@ -8,7 +8,7 @@ import { TextType } from "./TextNode.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const TextNode = (props: TextNodeProps) => {
-  const { className = "" } = props;
+  const { className = "", editable = true } = props;
   const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
@@ -83,7 +83,12 @@ export const TextNode = (props: TextNodeProps) => {
       >
         <button
           onClick={(e) => changeStyleHandler(e)}
-          className="block text-sm mr-2 bg-transparent hover:bg-gray-100 hover:cursor-pointer w-0 opacity-0 group-hover:opacity-100 group-hover:w-auto transition-opacity rounded-lg px-2 pt-1 mb-1 text-gray-500"
+          className={[
+            "block text-sm mr-2 bg-transparent transition-opacity rounded-lg",
+            "w-0 opacity-0 px-2 pt-1 mb-1 text-gray-500",
+            "hover:bg-gray-100 hover:cursor-pointer",
+            "group-hover:opacity-100 group-hover:w-auto",
+          ].join(" ")}
         >
           {nodeStyle}
         </button>

@@ -23,7 +23,7 @@ import {
 
 const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
   (props, ref) => {
-    const { className = "" } = props;
+    const { className = "", isEditable = true } = props;
     const { data, orderIndex, onNodeUpdate } = props;
     const [nodes, setNodes] = useState<React.ReactNode[]>([]);
 
@@ -43,6 +43,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextNodeRawData}
                 key={`text-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -56,6 +57,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextBlockNodeRawData}
                 key={`text-block-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -69,6 +71,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextInputNodeRawData}
                 key={`text-input-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -82,6 +85,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as NumberInputNodeRawData}
                 key={`number-input-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -137,7 +141,12 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
       return (
         <>
           <button
-            className={`bg-gray-200 rounded-lg hover:cursor-pointer px-4 min-h-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${disabledStyle}`}
+            className={[
+              "bg-gray-200 rounded-lg px-4 min-h-[32px] opacity-0 ",
+              "transition-opacity duration-150",
+              "hover:cursor-pointer group-hover:opacity-100",
+              disabledStyle,
+            ].join(" ")}
             onClick={(e) => addNodeHandler(e)}
           >
             +

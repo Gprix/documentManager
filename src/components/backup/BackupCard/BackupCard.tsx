@@ -66,10 +66,9 @@ const BackupCard = (props: BackupCardProps) => {
           <Image
             src={DropdownArrowSVG}
             alt=""
-            className={[
-              "transition-all duration-150",
-              showInfo ? "rotate-180" : "",
-            ].join(" ")}
+            className={["transition-md", showInfo ? "rotate-180" : ""].join(
+              " "
+            )}
           />
         </button>
       </div>

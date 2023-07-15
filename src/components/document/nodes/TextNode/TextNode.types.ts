@@ -1,4 +1,5 @@
 import { DocumentNodeRawData, TextNodeRawData } from "@/types/document.types";
+import { NodeSharedProps } from "../BaseNode/BaseNode.types";
 
 /**
  * TextNode component props.
@@ -10,15 +11,11 @@ import { DocumentNodeRawData, TextNodeRawData } from "@/types/document.types";
  * @param {number} inlineIndex - Node inline index.
  * @param {(node: DocumentNodeRawData, position: DocumentLineRawDataPosition) => void} onNodeUpdate - Callback function to update node data.
  */
-export interface TextNodeProps {
+export interface TextNodeProps extends NodeSharedProps {
   /** Custom className. */
   className?: string;
   /** Node data. */
   data?: TextNodeRawData;
-  /** Node row index. */
-  rowIndex: number;
-  /** Node inline index. */
-  inlineIndex: number;
   /** Callback function to update node data. */
   onNodeUpdate: (node: DocumentNodeRawData) => void;
 }
