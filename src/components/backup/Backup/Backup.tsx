@@ -14,10 +14,11 @@ import { getDatablocksInWorkspace } from "@/services/datablocks/datablocks.servi
 import { WriteBackupPayload } from "@/services/backup/backup.service.types";
 import { getLastBackup, writeBackup } from "@/services/backup/backup.service";
 import { createErrorNotification } from "@/utils/notifications.utils";
+import { createInfoNotification } from "@/utils/notifications.utils";
 import { createSuccessNotification } from "@/utils/notifications.utils";
 import { BackupList } from "../BackupList/BackupList";
 import { Backup as BackupType } from "@/types/backup.types";
-import { formatDate } from "@/utils/date.utils";
+import { formatDate, nextDay, nextMonth, nextWeek } from "@/utils/date.utils";
 
 export const Backup = (props: BackupProps) => {
   const { className = "" } = props;
@@ -27,6 +28,11 @@ export const Backup = (props: BackupProps) => {
     {}
   );
   const [lastBackup, setLastBackup] = useState<BackupType>();
+  const [savedBackupFrequency, setSavedBackupFrequency] = useState(
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("backup-frequency")
+      : undefined
+  );
 
   useEffect(() => {
     if (!workspaceId) return;
@@ -38,6 +44,22 @@ export const Backup = (props: BackupProps) => {
 
     retrieveLastBackup();
   }, [workspaceId]);
+
+  useEffect(() => {
+    if (!savedBackupFrequency) return;
+
+    const autoBackup = async () => {
+      if (Date.now() >= parseInt(savedBackupFrequency, 10)) {
+        createInfoNotification(
+          "Se está realizando una copia de seguridad automáticamente"
+        );
+        await handleBackup();
+        handleSelectFrequency("none");
+      }
+    };
+
+    autoBackup();
+  }, []);
 
   const handleCheckboxChange = (identifier: string, checked: boolean) =>
     setBackupContent((prev) => ({ ...prev, [identifier]: checked }));
@@ -110,6 +132,29 @@ export const Backup = (props: BackupProps) => {
     createSuccessNotification("Copia de seguridad creada correctamente");
   };
 
+  const handleSelectFrequency = (frequency: string) => {
+    switch (frequency) {
+      case "none":
+        localStorage.removeItem("backup-frequency");
+        setSavedBackupFrequency(undefined);
+        break;
+      case "daily":
+        localStorage.setItem("backup-frequency", `${nextDay.getTime()}`);
+        setSavedBackupFrequency(`${nextDay.getTime()}`);
+
+        break;
+      case "weekly":
+        localStorage.setItem("backup-frequency", `${nextWeek.getTime()}`);
+        setSavedBackupFrequency(`${nextWeek.getTime()}`);
+
+        break;
+      case "monthly":
+        localStorage.setItem("backup-frequency", `${nextMonth.getTime()}`);
+        setSavedBackupFrequency(`${nextMonth.getTime()}`);
+        break;
+    }
+  };
+
   return (
     <section className={`Backup flex w-full ${className}`}>
       <section className="p-6 w-1/2">
@@ -126,14 +171,15 @@ export const Backup = (props: BackupProps) => {
         <div className="flex mt-6 mb-4 justify-between items-center">
           <p>Frecuencia</p>
           <select
-            name=""
-            id=""
+            name="backup-frequency"
+            id="backup-frequency"
             className="rounded-lg pl-2 pr-6 py-2 hover:cursor-pointer"
+            onChange={(e) => handleSelectFrequency(e.target.value)}
           >
-            <option value="0">Ninguna</option>
-            <option value="1">Diaria</option>
-            <option value="2">Semanal</option>
-            <option value="3">Mensual</option>
+            <option value="none">Ninguna</option>
+            <option value="daily">Diaria</option>
+            <option value="weekly">Semanal</option>
+            <option value="monthly">Mensual</option>
           </select>
         </div>
 
@@ -168,6 +214,12 @@ export const Backup = (props: BackupProps) => {
         <Button onClick={() => handleBackup()} className="mt-4 w-full">
           Nueva copia de seguridad
         </Button>
+        {savedBackupFrequency ? (
+          <p className="mt-1 text-center text-xs font-light">
+            La próxima copia de seguridad se hará automáticamente el{" "}
+            {formatDate(savedBackupFrequency)}
+          </p>
+        ) : null}
       </section>
       <BackupList />
     </section>
