@@ -1,6 +1,6 @@
 import { LinkedNodePreviewProps } from "./LinkedNodePreview.types";
 
-import ChainSVG from "../../../../public/images/icons/chain.svg";
+import ChainSVG from "images/icons/chain.svg";
 import Image from "next/image";
 
 export const LinkedNodePreview = (props: LinkedNodePreviewProps) => {

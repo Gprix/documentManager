@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Button from "@/components/shared/Button/Button";
 import { GAccountDropdownProps } from "./GAccountDropdown.types";
-import DropdownArrowSVG from "../../../public/images/icons/dropdown-arrow.svg";
+import DropdownArrowSVG from "images/icons/dropdown-arrow.svg";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
 import { getMember } from "@/services/member/member.service";
 import { useEffect, useState } from "react";

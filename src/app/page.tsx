@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import WavesSVG from "../../public/images/waves.svg";
-import DocsSVG from "../../public/images/docs.svg";
-import LogoSVG from "../../public/images/logo.svg";
-import GoogleSVG from "../../public/images/auth/google.svg";
+import WavesSVG from "images/waves.svg";
+import DocsSVG from "images/docs.svg";
+import LogoSVG from "images/logo.svg";
+import GoogleSVG from "images/auth/google.svg";
 import { Poppins } from "next/font/google";
 import Button from "@/components/shared/Button/Button";
 import { useRouter } from "next/navigation";
@@ -57,9 +57,9 @@ const HomePage = () => {
               >
                 Continuar con Google
               </Button>
-              <Button type="outline" textStyle="text-white">
+              {/* <Button type="outline" textStyle="text-white">
                 Continuar con correo electrónico
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

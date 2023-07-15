@@ -2,10 +2,10 @@
 
 import { createContext, useMemo, useState } from "react";
 import { useEffect } from "react";
-import { Workspace } from "./workspace.context.types";
 import { WorkspaceContextProviderProps } from "./workspace.context.types";
 import { WorkspaceContextProviderValue } from "./workspace.context.types";
 import { getCurrentUserWorkspaces } from "@/services/workspace/workspace.service";
+import { Workspace } from "@/services/workspace/workspace.service.types";
 
 export const WorkspaceContext = createContext<WorkspaceContextProviderValue>(
   // @ts-ignore

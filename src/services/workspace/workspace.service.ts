@@ -1,5 +1,5 @@
 import { db, auth } from "@/config/firebase.config";
-import { doc, where, query, setDoc, getDoc } from "firebase/firestore";
+import { doc, where, query, setDoc, getDoc, or } from "firebase/firestore";
 import { getDocs, collection } from "firebase/firestore";
 import { WriteWorkspacePayload } from "./workspace.service.types";
 
@@ -13,6 +13,7 @@ export const writeWorkspace = async (payload: WriteWorkspacePayload) => {
       ...payload,
       uid,
       ownerUid: user.uid,
+      members: [user.uid],
     });
   } catch (e) {
     console.error(e);
@@ -52,14 +53,13 @@ export const getCurrentUserWorkspaces = async () => {
     const workspacesRef = collection(db, "workspaces");
     const q = query(
       workspacesRef,
-      where("ownerUid", "==", auth.currentUser?.uid)
+      or(
+        where("ownerUid", "==", auth.currentUser?.uid),
+        where("members", "array-contains", auth.currentUser?.uid)
+      )
     );
 
     const querySnapshot = await getDocs(q);
-
-    // querySnapshot.forEach((doc) => {
-    //   console.log(doc.id, " => ", doc.data());
-    // });
 
     const workspacesData = querySnapshot.docs.map((doc) => ({
       ...doc.data(),
