@@ -38,7 +38,8 @@ export const NumberInputNode = (props: NumberInputNodeProps) => {
 
   return (
     <BaseNode
-      className={`NumberInputNode px-3 pt-1 hover:cursor-text ${className}`}
+      className="NumberInputNode"
+      contentClassName={["px-3 pt-1 hover:cursor-text", className].join(" ")}
     >
       <input
         onChange={(e) => {
