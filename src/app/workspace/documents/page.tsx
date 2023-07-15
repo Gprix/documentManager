@@ -6,12 +6,14 @@ import { DocumentActions } from "@/components/document/DocumentActions/DocumentA
 import { useState } from "react";
 import { TemplatesModal } from "@/components/document/TemplatesModal/TemplatesModal";
 import { useTemplates } from "@/contexts/templates/templates.context.hooks";
+import { publishDocument } from "@/services/api/elperuano/elperuano.service";
+import { createErrorNotification } from "@/utils/notifications.utils";
+import { createSuccessNotification } from "@/utils/notifications.utils";
 
 const DocumentsPage = () => {
   const { selectedTemplates } = useTemplates();
   const [modalFlag, setModal] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
   const [showTemplatesModal, setShowTemplatesModal] = useState(false);
 
   // @ts-ignore
@@ -35,46 +37,16 @@ const DocumentsPage = () => {
   };
 
   // @ts-ignore
-  const handleFileUpload = async (file) => {
-    //TODO - Subir el archivo a Firebase Storage y crear un documento en Firestore con la información del archivo
+  const handleFileUpload = async (file: File | undefined) => {
+    // ? Es aquí donde se va a hacer lo del upload de documentos o se va a mover a un componente aparte?
+    if (!file) return;
 
-    // const firestore = firebase.firestore();
-    // const documentsCollectionRef = collection(firestore, "documents");
-
-    // const storage = getStorage(firebase);
-
-    // try {
-    //   // Subir el archivo al almacenamiento de Firebase
-    //   const storageRef = ref(storage, file.name);
-    //   await uploadBytes(storageRef, file);
-
-    //   // Obtener la URL de descarga del archivo
-    //   const downloadURL = await storageRef.getDownloadURL();
-
-    //   // Crear un documento en Firestore con la información del archivo
-    //   const documentData = {
-    //     name: file.name,
-    //     url: downloadURL,
-    //     timestamp: new Date(),
-    //   };
-
-    //   // Agregar el documento a la colección 'documents'
-    //   await addDoc(documentsCollectionRef, documentData);
-
-    //   console.log("Documento subido exitosamente");
-    // } catch (error) {
-    //   console.error("Error al subir el documento", error);
-    // }
-
-    displayConfirmationMessage();
-  };
-
-  const displayConfirmationMessage = () => {
-    setIsConfirmationVisible(true);
-    setTimeout(() => {
-      setIsConfirmationVisible(false);
-      setModal(false);
-    }, 3000);
+    const pub = await publishDocument({ file });
+    if (!pub) {
+      createErrorNotification("Error al publicar el documento.");
+      return;
+    }
+    createSuccessNotification("Documento publicado correctamente.");
   };
 
   const renderUploadDoc = () => {
@@ -112,12 +84,6 @@ const DocumentsPage = () => {
                 onChange={(e) => handleFileUpload(e.target.files?.[0])}
               />
             </label>
-
-            {isConfirmationVisible && (
-              <p className="bg-green-500 text-white mt-4 text-center py-2 px-4 rounded font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                Archivo recibido correctamente
-              </p>
-            )}
           </div>
         </div>
       </div>
