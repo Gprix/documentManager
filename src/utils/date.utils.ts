@@ -29,6 +29,7 @@ export const DAY_NAMES = [
 ];
 
 export const today = new Date();
+export const nextDay = add(today, { days: 1 });
 
 export const previousWeek = sub(today, { weeks: 1 });
 export const nextWeek = add(today, { weeks: 1 });
