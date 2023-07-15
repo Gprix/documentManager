@@ -12,6 +12,7 @@
 export interface Notification {
   uid: string;
   description: string;
+
   type: NotificationType;
   isRead: boolean;
   destination: string[];
@@ -19,3 +20,4 @@ export interface Notification {
 }
 
 export type NotificationType = "success" | "error" | "warning" | "info";
+

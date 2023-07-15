@@ -1,14 +1,13 @@
 "use client";
 
 import "@/styles/globals.css";
-import { Inter } from "next/font/google";
+import { Pathway_Extreme } from "next/font/google";
 import AppProviders from "./providers";
 import useListeners from "@/hooks/useListeners";
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const font = Inter({ subsets: ["latin"] });
+const pathwayExtreme = Pathway_Extreme({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -19,7 +18,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${font.className} mx-auto`}>
+      <body className={`${pathwayExtreme.className} mx-auto`}>
         <AppProviders>
           {/* // TODO: Portal para modales */}
           <ToastContainer

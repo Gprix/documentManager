@@ -20,8 +20,10 @@ export const createInfoNotification = async (
   destination?: string[]
 ) => {
   toast.info(message, options);
+
   LOG_NOTIFICATIONS &&
     writeNotification({ type: "info", description: message, destination });
+
 };
 
 export const createSuccessNotification = async (
@@ -29,6 +31,7 @@ export const createSuccessNotification = async (
   destination?: string[]
 ) => {
   toast.success(message, options);
+
   LOG_NOTIFICATIONS &&
     writeNotification({ type: "success", description: message, destination });
 };
