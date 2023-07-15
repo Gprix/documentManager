@@ -1,7 +1,7 @@
 import { cloudinary } from "@/config/cloudinary.config";
 import { auth, db } from "@/config/firebase.config";
 import axios from "axios";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { Publication, PublicationPayload } from "./elperuano.service.types";
 import { getBase64 } from "@/utils/file.utils";
 
@@ -51,7 +51,7 @@ export const publishDocument = async (payload: PublicationPayload) => {
   }
 };
 
-export const updateDocumentStatus = async (
+export const updatePublicationStatus = async (
   uid: string,
   status: Publication["status"]
 ) => {
@@ -60,6 +60,19 @@ export const updateDocumentStatus = async (
     if (!user) throw new Error("User not authenticated");
 
     await setDoc(doc(db, "publications", uid), { status }, { merge: true });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getPublication = async (uid: string) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not authenticated");
+
+    const pubRef = doc(db, "publications", uid);
+    const pubSnap = await getDoc(pubRef);
+    return pubSnap.data() as Publication;
   } catch (e) {
     console.log(e);
   }
