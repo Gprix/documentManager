@@ -85,7 +85,12 @@ export const DocumentActions = (props: DocumentActionsProps) => {
   return (
     <>
       <div className={`DocumentActions bg-primaryLight pt-2 pb-4 ${className}`}>
-        <div className="flex gap-x-8 px-6 overflow-x-auto">
+        <div
+          className={[
+            "flex gap-x-8 px-6 overflow-x-auto",
+            isTemplate ? "pt-2" : "pt-14",
+          ].join(" ")}
+        >
           {withNewAction ? (
             <div onClick={() => newAction()}>
               <div className="border border-transparent hover:border-dimmed bg-white relative w-[15rem] h-[10rem] hover:cursor-pointer rounded-t-xl transition-all duration-150">

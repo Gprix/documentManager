@@ -1,6 +1,6 @@
 import { DataCaptureWidgetProps } from "./DataCaptureWidget.types";
-import LeftArrowAltSVG from "../../../../public/images/icons/left-arrow-alt.svg";
-import RightArrowAltSVG from "../../../../public/images/icons/right-arrow-alt.svg";
+import LeftArrowAltSVG from "images/icons/left-arrow-alt.svg";
+import RightArrowAltSVG from "images/icons/right-arrow-alt.svg";
 import Image from "next/image";
 import { LinkedNodePreview } from "../LinkedNodePreview/LinkedNodePreview";
 
