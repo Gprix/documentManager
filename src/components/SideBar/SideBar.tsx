@@ -13,23 +13,30 @@ import CalendarSVG from "images/icons/calendar.svg";
 import DiscSVG from "images/icons/disc.svg";
 import DocPageSVG from "images/icons/doc-page.svg";
 import NotificationsSVG from "images/icons/notifications.svg";
+import CopyToClipboardButton from "../shared/CopyToClipboard/CopyToClipboard";
 
 const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   const { selectedWorkspace } = useWorkspace();
   const { uid } = useAuth();
   const [photoURL, setPhotoURL] = useState("");
 
-  const renderProfilePreview = () => {
+  const ProfilePreview = () => {
     return (
-      <div className="flex flex-col items-center">
+      <div
+        className={[
+          "flex flex-col items-center rounded-lg mt-4 py-3 mx-2 transition-md",
+          "hover:bg-primaryMedium hover:cursor-pointer hover:shadow",
+          "active:bg-primaryDark active:shadow-none",
+        ].join(" ")}
+      >
         <Image
           src={photoURL}
-          width="64"
-          height="64"
+          width="32"
+          height="32"
           className="rounded-full"
           alt="Profile picture"
         />
-        <button className="Sidebar__element">...</button>
+        <CopyToClipboardButton className="mt-2" text={uid} />
       </div>
     );
   };
@@ -48,35 +55,63 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   }, [uid]);
 
   return (
-    <aside className="Sidebar min-w-[144px] shadow" id="sidebar">
+    <aside
+      className={[
+        "Sidebar",
+        "bg-primaryDark w-[96px] py-6 overflow-hidden",
+        "flex flex-col justify-between items-center",
+      ].join(" ")}
+      id="sidebar"
+    >
       <div className="Sidebar__information text-center">
         <div className="Sidebar__information__logo hover:cursor-pointer">
           <Link href="/workspace">
-            <Image src={logo} alt="Logo notaria" />
+            <Image src={logo} alt="Logo notaria" className="w-full" />
           </Link>
         </div>
-        <p className="Sidebar__information__workspace-name text-center pt-2">
-          {selectedWorkspace?.name}
-        </p>
-        <p className="Sidebar__information__id text-center text-xs opacity-50">
-          #{selectedWorkspace?.uid}
-        </p>
+        <ProfilePreview />
       </div>
-      <div className="flex flex-col gap-y-8">
-        <Link href="/workspace/schedule" className="Sidebar__element">
+
+      <div
+        className={[
+          "flex flex-col gap-y-4 shadow-md bg-primary px-2 py-8 rounded-full",
+          "hover:cursor-pointer",
+        ].join(" ")}
+      >
+        <Link
+          href="/workspace/schedule"
+          className="Sidebar__element p-3 rounded-full hover:bg-primaryMedium transition-md"
+        >
           <Image src={CalendarSVG} alt="schedule" />
         </Link>
-        <Link href="/workspace/documents" className="Sidebar__element">
+        <Link
+          href="/workspace/documents"
+          className="Sidebar__element p-3 rounded-full hover:bg-primaryMedium transition-md"
+        >
           <Image src={DocPageSVG} alt="documents" />
         </Link>
-        <Link href="/workspace/notifications" className="Sidebar__element">
+        <Link
+          href="/workspace/notifications"
+          className="Sidebar__element p-3 rounded-full hover:bg-primaryMedium transition-md"
+        >
           <Image src={NotificationsSVG} alt="notifications" />
         </Link>
-        <Link href="/workspace/backup" className="Sidebar__element">
+        <Link
+          href="/workspace/backup"
+          className="Sidebar__element p-3 rounded-full hover:bg-primaryMedium transition-md"
+        >
           <Image src={DiscSVG} alt="backup" />
         </Link>
       </div>
-      {renderProfilePreview()}
+
+      <div>
+        <p
+          className="Sidebar__information__workspace-name text-center text-slate-900 font-bold"
+          title={selectedWorkspace?.uid}
+        >
+          {selectedWorkspace?.name}
+        </p>
+      </div>
     </aside>
   );
 });

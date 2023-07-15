@@ -11,6 +11,19 @@ export interface BaseNodeProps {
   children?: React.ReactNode;
   /** Custom className. */
   className?: string;
+  /** Custom className for inner content */
+  contentClassName?: string;
   /** Node data. */
   data?: NodeRawData;
+  /** Is node editable. */
+  editable?: boolean;
+}
+
+export interface NodeSharedProps {
+  /** Node row index. */
+  rowIndex: number;
+  /** Node inline index. */
+  inlineIndex: number;
+  /** Is node editable. */
+  editable?: boolean;
 }

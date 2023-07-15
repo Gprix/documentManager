@@ -1,32 +1,51 @@
 "use client";
 
-import Image from "next/image";
 import { TextBlockNodeProps } from "./TextBlockNode.types";
-import DropDownArrowSVG from "../../../../../public/images/icons/dropdown-arrow.svg";
 import { BaseNode } from "../BaseNode/BaseNode";
 import { useEffect, useState, useMemo } from "react";
-import { useLayoutEffect, MouseEvent } from "react";
+import { useLayoutEffect } from "react";
 import { useDocument } from "@/contexts/document/document.context.hooks";
-import { SecondaryMenu } from "@/components/shared/SecondaryMenu/SecondaryMenu";
 import { useDatablocks } from "@/contexts/datablocks/datablocks.context.hooks";
 
+import Select, { SingleValue } from "react-select";
+import { getLastFromPathname } from "@/utils/common.utils";
+import NewBlockModal from "./NewBlockModal";
+
 export const TextBlockNode = (props: TextBlockNodeProps) => {
-  const { className = "" } = props;
+  const { className = "", editable = true } = props;
   const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const { selectedDocument } = useDocument();
   const { selectedDatablocks } = useDatablocks();
   const [blockEntryId, setBlockEntryId] = useState<string | null>(null);
-  const [origin, setOrigin] = useState({ x: 0, y: 0 });
-  const [showSecondaryMenu, setShowSecondaryMenu] = useState(false);
-  const [textValue, setTextValue] = useState("");
-  const isCursorPastMiddle = useMemo(() => {
-    return origin.x > window.innerWidth / 2;
-  }, [origin]);
+  const [, setTextValue] = useState("");
+  const [showNewBlockModal, setShowNewBlockModal] = useState(false);
 
-  const handleUpdate = (e: MouseEvent<HTMLDivElement>) => {
+  const blocksAsOptions = useMemo(() => {
+    return selectedDatablocks?.map((datablock) => ({
+      value: datablock.uid,
+      label: datablock.value,
+    }));
+  }, [selectedDatablocks]);
+
+  const handleUpdate = (
+    option: SingleValue<{ label: string; value: string }>
+  ) => {
     if (!selectedDocument) return;
-    setOrigin({ x: e.pageX, y: e.pageY });
-    setShowSecondaryMenu(true);
+
+    const { label, value } = option ?? {};
+
+    if (!label || !value) return;
+
+    setTextValue(label);
+    setBlockEntryId(value);
+
+    onNodeUpdate({
+      rowIndex,
+      inlineIndex,
+      isFullLine: false,
+      type: "textBlock",
+      blockEntryId: value,
+    });
   };
 
   useLayoutEffect(() => {
@@ -55,60 +74,50 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
 
   return (
     <>
-      <BaseNode className={`TextBlockNode pl-3 pr-1 pt-2 pb-1 ${className}`}>
-        <div
-          className="flex justify-between items-start"
-          onClick={(e) => handleUpdate(e)}
-        >
-          <p className="text-black font-light text-sm">
-            {textValue === "" ? "Seleccione un bloque de datos..." : textValue}
-          </p>
-          <Image src={DropDownArrowSVG} alt="" className="pl-2 pt-[0.1rem]" />
-        </div>
+      <BaseNode
+        className={["TextBlockNode", "overflow-visible !rounded-lg"].join(" ")}
+        contentClassName={[
+          "hover:bg-gray-200",
+          "pl-3 pr-1 pt-2 pb-1 !rounded-lg",
+          className,
+        ].join(" ")}
+      >
+        <Select
+          value={blocksAsOptions?.find(
+            (option) => option.value === blockEntryId
+          )}
+          formatOptionLabel={(option) => getLastFromPathname(option.label)}
+          options={blocksAsOptions}
+          isSearchable
+          noOptionsMessage={() => (
+            <span onClick={() => setShowNewBlockModal(true)}>
+              + Agregar nuevo bloque de texto
+            </span>
+          )}
+          onChange={(option) => handleUpdate(option)}
+          className="text-sm font-light"
+          styles={{
+            control: (provided) => ({
+              ...provided,
+              border: "none",
+              boxShadow: "none",
+              backgroundColor: "transparent",
+              borderRadius: "0.5rem",
+              padding: "0",
+            }),
+            indicatorSeparator: (provided) => ({
+              ...provided,
+              display: "none",
+            }),
+            menu: (provided) => ({
+              ...provided,
+              minWidth: "20rem",
+            }),
+          }}
+        />
       </BaseNode>
-      {showSecondaryMenu ? (
-        <SecondaryMenu
-          className="w-[20rem] max-w-[20rem]"
-          top={origin.y}
-          // TODO: find a way to calculate the width of the menu
-          left={!isCursorPastMiddle ? origin.x - 140 : origin.x - 320 - 140}
-          onDismiss={() => setShowSecondaryMenu(false)}
-        >
-          <ul role="listbox">
-            {!selectedDatablocks || !selectedDatablocks.length ? (
-              <p className="px-3 py-2">No se han encontrado bloques de datos</p>
-            ) : null}
-            {selectedDatablocks?.map((datablock) => {
-              const { uid, value } = datablock;
-
-              const actionHandler = () => {
-                setBlockEntryId(uid);
-                setTextValue(value);
-
-                onNodeUpdate({
-                  rowIndex,
-                  inlineIndex,
-                  isFullLine: false,
-                  type: "textBlock",
-                  blockEntryId: uid,
-                });
-
-                setShowSecondaryMenu(false);
-              };
-
-              return (
-                <li key={uid}>
-                  <button
-                    className="context-menu__item"
-                    onClick={() => actionHandler()}
-                  >
-                    {value}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </SecondaryMenu>
+      {showNewBlockModal ? (
+        <NewBlockModal onClose={() => setShowNewBlockModal(false)} />
       ) : null}
     </>
   );

@@ -1,4 +1,5 @@
 import { TextBlockNodeRawData } from "@/types/document.types";
+import { NodeSharedProps } from "../BaseNode/BaseNode.types";
 
 /**
  * TextBlockNode component props.
@@ -10,15 +11,15 @@ import { TextBlockNodeRawData } from "@/types/document.types";
  * @param {number} inlineIndex - Node inline index.
  * @param {(node: TextBlockNodeRawData) => void} onNodeUpdate - Callback function to update node data.
  */
-export interface TextBlockNodeProps {
+export interface TextBlockNodeProps extends NodeSharedProps {
   /** Custom className. */
   className?: string;
   /** Node data. */
   data?: TextBlockNodeRawData;
-  /** Node row index. */
-  rowIndex: number;
-  /** Node inline index. */
-  inlineIndex: number;
   /** Callback function to update node data. */
   onNodeUpdate: (node: TextBlockNodeRawData) => void;
+}
+
+export interface NewBlockModalProps {
+  onClose: () => void;
 }

@@ -1,12 +1,25 @@
 import { BaseNodeProps } from "./BaseNode.types";
 
 export const BaseNode = (props: BaseNodeProps) => {
-  const { children, className = "" } = props;
+  const { children, className = "", contentClassName = "" } = props;
+  const { editable = true } = props;
 
   return (
-    <div className="BaseNode rounded-lg hover:cursor-pointer bg-transparent group-hover:bg-gray-50 transition-colors duration-150 inline flex-grow overflow-clip">
+    <div
+      className={[
+        "BaseNode",
+        "hover:cursor-pointer group-hover:bg-gray-50",
+        "rounded-lg bg-transparent inline flex-grow overflow-clip",
+        "transition-colors duration-150",
+        className,
+      ].join(" ")}
+    >
       <div
-        className={`w-full h-full hover:bg-gray-200 transition-colors duration-150 ${className}`}
+        className={[
+          "w-full h-full transition-colors duration-150",
+          "hover:bg-gray-200",
+          contentClassName,
+        ].join(" ")}
       >
         {children}
       </div>

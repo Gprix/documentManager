@@ -4,7 +4,7 @@ import { TextInputNodeProps } from "./TextInputNode.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const TextInputNode = (props: TextInputNodeProps) => {
-  const { className = "" } = props;
+  const { className = "", editable = true } = props;
   const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const { selectedDocument } = useDocument();
   const [value, setValue] = useState("");
@@ -40,7 +40,14 @@ export const TextInputNode = (props: TextInputNodeProps) => {
 
   return (
     <BaseNode
-      className={`TextInputNode px-3 pt-1 hover:cursor-text ${linkedStyle} ${className}`}
+      className="TextInputNode"
+      contentClassName={[
+        "px-3 pt-1",
+        "hover:cursor-text",
+        "flex flex-col justify-center",
+        linkedStyle,
+        className,
+      ].join(" ")}
     >
       <input
         value={value}

@@ -3,31 +3,45 @@
 import GoBack from "@/components/GoBack/GoBack";
 import { DocumentViewProps } from "./DocumentView.types";
 import Button from "@/components/shared/Button/Button";
-import RightArrowWhiteSVG from "../../../../public/images/icons/right-arrow-white.svg";
+import RightArrowWhiteSVG from "images/icons/right-arrow-white.svg";
 import { Paper } from "../Paper/Paper";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { getDocument } from "@/services/document/document.service";
 import { updateDocument } from "@/services/document/document.service";
-import { Document } from "@/types/document.types";
+import { Document, DocumentType } from "@/types/document.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
-// import DropdownArrowWhiteSVG from "../../../../public/images/icons/dropdown-arrow-white.svg";
 import { DataCaptureModal } from "../DataCaptureModal/DataCaptureModal";
-import { DocumentToolbox } from "../DocumentToolbox/DocumentToolbox";
+// import { DocumentToolbox } from "../DocumentToolbox/DocumentToolbox";
 import { getTemplate } from "@/services/template/template.service";
 import { updateTemplate } from "@/services/template/template.service";
 import { WriteTemplatePayload } from "@/services/template/template.service.types";
-// import { doc, setDoc } from "@firebase/firestore";
-// import { db } from "@/config/firebase.config";
+import EditableText from "@/components/shared/EditableText/EditableText";
+import { EditableTextRef } from "@/components/shared/EditableText/EditableText.types";
+import { createErrorNotification } from "@/utils/notifications.utils";
+import { exportDocument, importDocument } from "@/utils/document.utils";
+import { Modal } from "@/components/shared/Modal/Modal";
+import { createSuccessNotification } from "@/utils/notifications.utils";
+import Link from "next/link";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
   const { documentId, isTemplate } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
-  const { title, uid } = selectedDocument ?? {};
+  const { title, uid, documentType } = selectedDocument ?? {};
   const [showDataCaptureModal, setShowDataCaptureModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const { setRecentDocuments } = useDocument();
   const [isEditing, setIsEditing] = useState(false);
+  const [localType, setLocalType] = useState<DocumentType>();
+
+  const enhancedTitle = useMemo(() => {
+    if (!title) return "";
+
+    return title.trim();
+  }, [title]);
+
+  const titleRef = useRef<EditableTextRef>(null);
 
   const handleButtonClick = async () => {
     if (!selectedDocument) return;
@@ -45,13 +59,67 @@ export const DocumentView = (props: DocumentViewProps) => {
       };
 
       await updateTemplate(currentTemplateId, currentTemplate);
+      createSuccessNotification("Plantilla actualizada correctamente");
     }
 
-    if (isEditing && !isTemplate)
-      await updateDocument(selectedDocument.uid, selectedDocument);
+    if (isEditing && !isTemplate) {
+      await updateDocument(selectedDocument.uid, {
+        ...selectedDocument,
+        title: titleRef?.current?.getTitle() ?? title ?? "",
+      });
+      createSuccessNotification("Acta actualizada correctamente");
+    }
 
     setIsEditing((prev) => !prev);
   };
+
+  const handleImport = async (file: File | undefined) => {
+    if (!file) {
+      createErrorNotification("No se pudo importar el documento");
+      return;
+    }
+    const isCompressed = file.name.endsWith(".dcn");
+
+    try {
+      const imported = await importDocument(file, isCompressed);
+      if (!imported) {
+        createErrorNotification("No se pudo importar el documento");
+        return;
+      }
+      const documentPayload: Document = {
+        ...imported,
+        workspaceId: selectedDocument?.workspaceId ?? "",
+        uid: selectedDocument?.uid ?? "",
+        authorId: selectedDocument?.authorId ?? "",
+      };
+
+      setSelectedDocument(documentPayload);
+      createSuccessNotification("Documento importado correctamente!");
+      await handleButtonClick();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handlePublishClick = async () => {};
+
+  useEffect(() => {
+    if (!documentType) return;
+
+    setLocalType(documentType);
+  }, [documentType]);
+
+  useEffect(() => {
+    if (!localType) return;
+    setSelectedDocument((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        documentType: localType,
+      };
+    });
+  }, [localType]);
 
   // Set recent documents
   useLayoutEffect(() => {
@@ -62,7 +130,7 @@ export const DocumentView = (props: DocumentViewProps) => {
   }, [isTemplate, setRecentDocuments, uid]);
 
   // Retrieve document
-  useLayoutEffect(() => {
+  useEffect(() => {
     const retrieveDocument = async () => {
       const retrievedDocument = isTemplate
         ? await getTemplate(documentId)
@@ -100,14 +168,74 @@ export const DocumentView = (props: DocumentViewProps) => {
     <>
       <section className={`DocumentView relative ${className}`}>
         {/* Top toolbar */}
-        <div className="bg-white">
+        <div className="bg-white border-b-gray-100 border-b">
           <div className="DocumentView__controls flex justify-between px-4 pt-6 pb-4 shadow-md">
             <div className="DocumentView__controls--left flex w-full">
               <GoBack />
               <div className="DocumentView__info">
-                <p className="text-black text-xl">{title}</p>
-                {/* <p className="text-dimmed">Última modificación por: </p> */}
+                {enhancedTitle ? (
+                  <EditableText
+                    ref={titleRef}
+                    text={enhancedTitle}
+                    className="text-xl mb-2"
+                    inputClassName={[
+                      "underline underline-offset-[6px]",
+                      "force-full-width !max-w-[71vw] z-10 no-focus-outline",
+                    ].join(" ")}
+                    additionalAction={() => setIsEditing(true)}
+                  />
+                ) : (
+                  <p className="text-xl">{title}</p>
+                )}
+                {localType ? (
+                  <p
+                    className={[
+                      "text-sm",
+                      isEditing ? "hover:cursor-pointer" : "",
+                    ].join(" ")}
+                    onClick={() =>
+                      isEditing
+                        ? setLocalType((prev) =>
+                            prev === "protocol" ? "extra" : "protocol"
+                          )
+                        : undefined
+                    }
+                  >
+                    <span className="text-dimmed">
+                      {isTemplate ? "Plantilla" : "Acta"}
+                    </span>
+                    {" 🞄 "}
+                    <span
+                      className={[
+                        localType === "protocol"
+                          ? "bg-primary"
+                          : "bg-secondary",
+                        "px-2 rounded-full text-white",
+                      ].join(" ")}
+                    >
+                      {localType === "protocol"
+                        ? "Protocolar"
+                        : "Extra protocolar"}
+                    </span>
+                  </p>
+                ) : null}
               </div>
+            </div>
+            <div className="flex items-center  mr-4 ">
+              <Link
+                href="/workspace/publishdocs"
+                className="text-[#FF4D84] underline"
+              >
+                Ver estado
+              </Link>
+            </div>
+            <div className="flex items-center  mr-4 ">
+              <button
+                onClick={handlePublishClick}
+                className="text-[#FF4D84] underline"
+              >
+                Publicar
+              </button>
             </div>
             <Button
               onClick={handleButtonClick}
@@ -119,71 +247,61 @@ export const DocumentView = (props: DocumentViewProps) => {
           </div>
         </div>
 
-        {/* Document toolbar */}
-        {isEditing ? <DocumentToolbox /> : null}
+        {/* {isEditing ? <DocumentToolbox /> : null} */}
+        {isEditing ? (
+          <div className="flex gap-x-4 bg-primaryLight">
+            <Button type="transparent" onClick={() => setShowImportModal(true)}>
+              Importar
+            </Button>
+            <Button
+              type="transparent"
+              onClick={() => {
+                if (!selectedDocument) return;
+                exportDocument(selectedDocument);
+              }}
+            >
+              Exportar
+            </Button>
+          </div>
+        ) : null}
 
-        {/* Document */}
         <div
           className={`overflow-y-auto h-screen max-h-screen ${
             isEditing ? "bg-secondaryLight" : ""
           }`}
         >
           <Paper
+            isEditing={isEditing}
             document={{ ...selectedDocument } as Document}
-            className={`text-black mb-64 transition-all duration-150 ${
+            className={[
+              "text-black mb-64 transition-md",
+              "mx-auto max-w-[1024px] bg-transparent",
               isEditing
-                ? "bg-white rounded-xl mx-32 mt-8"
-                : "bg-[#f9f9f9] rounded-none"
-            }`}
+                ? "bg-white rounded-xl mt-8 mb-64 shadow-md"
+                : "bg-[#f9f9f9] rounded-none",
+            ].join(" ")}
           />
         </div>
 
-        {/* <div className="absolute right-0 top-0">
-          <DataCaptureWidget />
-        </div> */}
+        <div className="absolute right-0 top-0"></div>
 
-        <div className="absolute right-0 bottom-0 pt-4 pl-4">
-          {/* <Button
-            className="mr-4 mb-32"
-            rightIcon={DropdownArrowWhiteSVG}
-            // onClick={() => setShowDataCaptureModal(!showDataCaptureModal)}
-            onClick={() => {
-              const testWriteDataBlock = async () => {
-                const values = [
-                  "Son",
-                  "Es",
-                  "Mayor de edad",
-                  "Hábil para contratar",
-                  "Inteligente en el idioma castellano",
-                  "Procede con libertad, capacidad y conocimiento suficiente",
-                  "De lo que doy fe",
-                  "Y",
-                ];
-
-                try {
-                  values.forEach(async (value) => {
-                    const uid = crypto.randomUUID();
-
-                    await setDoc(doc(db, "datablocks", uid), {
-                      authorId: "AtnCKk4MQEYIbQOftB7d8lVFI3o2",
-                      workspaceId: "1a56661e-c1f3-4b57-9db5-dfd4ee08db19",
-                      uid: uid,
-                      value: value,
-                    });
-                    console.log("Data block added:", value);
-                  });
-                } catch (e) {
-                  console.log("Error adding datablock: ", e);
-                }
-              };
-
-              testWriteDataBlock();
-            }}
-          >
-            Capturar datos
-          </Button> */}
-        </div>
+        <div className="absolute right-0 bottom-0 pt-4 pl-4"></div>
       </section>
+      {showImportModal ? (
+        <Modal
+          className="p-6 centered-relative"
+          onClose={() => setShowImportModal(false)}
+        >
+          <p className="text-xl ">Importar documento</p>
+          <p className="text-sm text-dimmed mb-3">
+            Seleccionar archivo .json o .dcn
+          </p>
+          <input
+            type="file"
+            onChange={(e) => handleImport(e.target.files?.[0])}
+          />
+        </Modal>
+      ) : null}
       {showDataCaptureModal ? (
         <DataCaptureModal
           onClose={() => setShowDataCaptureModal(!showDataCaptureModal)}
