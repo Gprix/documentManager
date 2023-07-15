@@ -19,3 +19,7 @@ export interface TextBlockNodeProps extends NodeSharedProps {
   /** Callback function to update node data. */
   onNodeUpdate: (node: TextBlockNodeRawData) => void;
 }
+
+export interface NewBlockModalProps {
+  onClose: () => void;
+}

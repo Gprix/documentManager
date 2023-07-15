@@ -10,6 +10,8 @@ export interface EditableTextProps {
   text: string;
   /** Custom className for the input. */
   inputClassName?: string;
+  /** Extra callback to be executed when the text changes. */
+  additionalAction?: () => void;
 }
 
 export interface EditableTextRef {

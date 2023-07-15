@@ -43,7 +43,7 @@ export const TextInputNode = (props: TextInputNodeProps) => {
       className="TextInputNode"
       contentClassName={[
         "px-3 pt-1",
-        editable ? "hover:cursor-text" : "",
+        "hover:cursor-text",
         "flex flex-col justify-center",
         linkedStyle,
         className,

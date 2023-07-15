@@ -86,8 +86,8 @@ export const TextNode = (props: TextNodeProps) => {
           className={[
             "block text-sm mr-2 bg-transparent transition-opacity rounded-lg",
             "w-0 opacity-0 px-2 pt-1 mb-1 text-gray-500",
-            editable ? "hover:bg-gray-100 hover:cursor-pointer" : "",
-            editable ? "group-hover:opacity-100 group-hover:w-auto" : "",
+            "hover:bg-gray-100 hover:cursor-pointer",
+            "group-hover:opacity-100 group-hover:w-auto",
           ].join(" ")}
         >
           {nodeStyle}

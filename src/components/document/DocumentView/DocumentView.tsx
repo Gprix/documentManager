@@ -19,6 +19,7 @@ import { updateTemplate } from "@/services/template/template.service";
 import { WriteTemplatePayload } from "@/services/template/template.service.types";
 import EditableText from "@/components/shared/EditableText/EditableText";
 import { EditableTextRef } from "@/components/shared/EditableText/EditableText.types";
+import { createSuccessNotification } from "@/utils/notifications.utils";
 // import { doc, setDoc } from "@firebase/firestore";
 // import { db } from "@/config/firebase.config";
 
@@ -26,21 +27,11 @@ export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
   const { documentId, isTemplate } = props;
   const { selectedDocument, setSelectedDocument } = useDocument();
-  const { title, uid, documentType: _documentType } = selectedDocument ?? {};
+  const { title, uid, documentType } = selectedDocument ?? {};
   const [showDataCaptureModal, setShowDataCaptureModal] = useState(false);
   const { setRecentDocuments } = useDocument();
   const [isEditing, setIsEditing] = useState(false);
   const [localType, setLocalType] = useState<DocumentType>();
-
-  const documentType = useMemo(() => {
-    if (!_documentType) return;
-
-    setLocalType(_documentType);
-    return _documentType;
-  }, [selectedDocument]);
-
-  console.log({ documentType });
-  console.log({ localType });
 
   const enhancedTitle = useMemo(() => {
     if (!title) return "";
@@ -66,26 +57,37 @@ export const DocumentView = (props: DocumentViewProps) => {
       };
 
       await updateTemplate(currentTemplateId, currentTemplate);
+      createSuccessNotification("Plantilla actualizada correctamente");
     }
 
-    if (isEditing && !isTemplate)
-      await updateDocument(selectedDocument.uid, selectedDocument);
+    if (isEditing && !isTemplate) {
+      await updateDocument(selectedDocument.uid, {
+        ...selectedDocument,
+        title: titleRef?.current?.getTitle() ?? title ?? "",
+      });
+      createSuccessNotification("Acta actualizada correctamente");
+    }
 
     setIsEditing((prev) => !prev);
   };
 
-  const handleSwitchProtocol = () => {
-    setLocalType((prev) => (prev === "protocol" ? "extra" : "protocol"));
+  useEffect(() => {
+    if (!documentType) return;
+
+    setLocalType(documentType);
+  }, [documentType]);
+
+  useEffect(() => {
+    if (!localType) return;
     setSelectedDocument((prev) => {
       if (!prev) return prev;
-      console.log({ dt: prev.documentType });
 
       return {
         ...prev,
-        documentType: localType ? "protocol" : "extra",
+        documentType: localType,
       };
     });
-  };
+  }, [localType]);
 
   // Set recent documents
   useLayoutEffect(() => {
@@ -96,7 +98,7 @@ export const DocumentView = (props: DocumentViewProps) => {
   }, [isTemplate, setRecentDocuments, uid]);
 
   // Retrieve document
-  useLayoutEffect(() => {
+  useEffect(() => {
     const retrieveDocument = async () => {
       const retrievedDocument = isTemplate
         ? await getTemplate(documentId)
@@ -148,6 +150,7 @@ export const DocumentView = (props: DocumentViewProps) => {
                       "underline underline-offset-[6px]",
                       "force-full-width !max-w-[71vw] z-10 no-focus-outline",
                     ].join(" ")}
+                    additionalAction={() => setIsEditing(true)}
                   />
                 ) : (
                   <p className="text-xl">{title}</p>
@@ -159,7 +162,11 @@ export const DocumentView = (props: DocumentViewProps) => {
                       isEditing ? "hover:cursor-pointer" : "",
                     ].join(" ")}
                     onClick={() =>
-                      isEditing ? handleSwitchProtocol() : undefined
+                      isEditing
+                        ? setLocalType((prev) =>
+                            prev === "protocol" ? "extra" : "protocol"
+                          )
+                        : undefined
                     }
                   >
                     <span className="text-dimmed">
@@ -192,16 +199,8 @@ export const DocumentView = (props: DocumentViewProps) => {
           </div>
         </div>
 
-        {/* Document toolbar */}
         {/* {isEditing ? <DocumentToolbox /> : null} */}
-        {isEditing ? (
-          <div className="flex gap-x-4 px-2">
-            <button>Importar</button>
-            <button>Exportar</button>
-          </div>
-        ) : null}
 
-        {/* Document */}
         <div
           className={`overflow-y-auto h-screen max-h-screen ${
             isEditing ? "bg-secondaryLight" : ""
@@ -220,51 +219,9 @@ export const DocumentView = (props: DocumentViewProps) => {
           />
         </div>
 
-        {/* <div className="absolute right-0 top-0">
-          <DataCaptureWidget />
-        </div> */}
+        <div className="absolute right-0 top-0"></div>
 
-        <div className="absolute right-0 bottom-0 pt-4 pl-4">
-          {/* <Button
-            className="mr-4 mb-32"
-            rightIcon={DropdownArrowWhiteSVG}
-            // onClick={() => setShowDataCaptureModal(!showDataCaptureModal)}
-            onClick={() => {
-              const testWriteDataBlock = async () => {
-                const values = [
-                  "Son",
-                  "Es",
-                  "Mayor de edad",
-                  "Hábil para contratar",
-                  "Inteligente en el idioma castellano",
-                  "Procede con libertad, capacidad y conocimiento suficiente",
-                  "De lo que doy fe",
-                  "Y",
-                ];
-
-                try {
-                  values.forEach(async (value) => {
-                    const uid = crypto.randomUUID();
-
-                    await setDoc(doc(db, "datablocks", uid), {
-                      authorId: "AtnCKk4MQEYIbQOftB7d8lVFI3o2",
-                      workspaceId: "1a56661e-c1f3-4b57-9db5-dfd4ee08db19",
-                      uid: uid,
-                      value: value,
-                    });
-                    console.log("Data block added:", value);
-                  });
-                } catch (e) {
-                  console.log("Error adding datablock: ", e);
-                }
-              };
-
-              testWriteDataBlock();
-            }}
-          >
-            Capturar datos
-          </Button> */}
-        </div>
+        <div className="absolute right-0 bottom-0 pt-4 pl-4"></div>
       </section>
       {showDataCaptureModal ? (
         <DataCaptureModal

@@ -11,7 +11,7 @@ const EditableText: ForwardRefRenderFunction<
   EditableTextProps
 > = (props: EditableTextProps, ref) => {
   const { className = "", inputClassName = "" } = props;
-  const { text } = props;
+  const { text, additionalAction } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(text);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,6 +26,8 @@ const EditableText: ForwardRefRenderFunction<
 
     inputRef.current.select();
     inputRef.current.scrollLeft = 0;
+
+    additionalAction?.();
   }, [isEditing]);
 
   return (

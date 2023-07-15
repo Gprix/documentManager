@@ -141,7 +141,12 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
       return (
         <>
           <button
-            className={`bg-gray-200 rounded-lg hover:cursor-pointer px-4 min-h-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${disabledStyle}`}
+            className={[
+              "bg-gray-200 rounded-lg px-4 min-h-[32px] opacity-0 ",
+              "transition-opacity duration-150",
+              "hover:cursor-pointer group-hover:opacity-100",
+              disabledStyle,
+            ].join(" ")}
             onClick={(e) => addNodeHandler(e)}
           >
             +
@@ -182,7 +187,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
         className={`InteractiveLine flex gap-x-2 shadow-gray-200 hover:shadow-transparent transition-colors duration-150 pb-2 group ${className}`}
       >
         {nodes}
-        {isEditable ? <AddNode /> : null}
+        <AddNode />
       </div>
     );
   }

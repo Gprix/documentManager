@@ -9,7 +9,7 @@ import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const Paper = (props: PaperProps) => {
   const { className = "" } = props;
-  const { document, isEditing } = props;
+  const { document, isEditing = true } = props;
   const { setSelectedDocument } = useDocument();
   const { documentData: documentDataProps } = document ?? {};
   const [lines, setLines] = useState<React.ReactNode[]>([]);
@@ -78,7 +78,7 @@ export const Paper = (props: PaperProps) => {
       setLines((prevLines) => [
         ...prevLines,
         <InteractiveLine
-          isEditable={!!isEditing}
+          isEditable={isEditing}
           orderIndex={prevLines.length}
           data={lineData}
           key={`line-${prevLines.length}`}
