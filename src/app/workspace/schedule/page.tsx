@@ -6,17 +6,18 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 import { format, parse, startOfToday, add } from "date-fns";
 import CalendarWeek from "@/components/calendar/calendarWeek";
 import CalendarMonth from "@/components/calendar/calendarMonth";
-import enviarCorreo from "@/services/email/email.service";
 import Link from "next/link";
 
 const schedulePage = () => {
 
-  const [modalFlag, setModal] = useState<boolean>(false);
+  const [modalFlag, setModal] = useState<boolean>(true);
   const [eventData, setEventData] = useState<Object>({
     clientName: "",
+    clientEmail: "",
     date: "",
     time: null,
     description: "",
+    workerId : "AtnCKk4MQEYIbQOftB7d8lVFI3o2"
   });
   const [_data, setData] = useState([]);
   const [clientNames, setClientNames] = useState([]);
@@ -152,19 +153,6 @@ const schedulePage = () => {
     }
   };
 
-  const handlerEmail = (event: React.MouseEvent<SVGSVGElement>) => {
-    event.preventDefault();
-
-    var templateParams = {
-      target: "andreeg199@gmail.com",
-      name: "Usuario",
-      from_name: "Docunot",
-      message: "Esto es un mensaje automatico de Document Manager"
-    };
-
-    enviarCorreo(templateParams)
-  };
-
   const renderEventForm = () => {
     return (
       <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50">
@@ -218,13 +206,13 @@ const schedulePage = () => {
                   />
                 </div>
                 <div className="flex w-full">
-                  <label className="w-1/3 flex items-center">Documento:</label>
+                  <label className="w-1/3 flex items-center">E-Mail:</label>
                   <input
                     className="border-2 border-gray-300 rounded-md px-2  w-full"
                     type="text"
-                    name="clientDocument"
+                    name="clientEmail"
                     // @ts-ignore
-                    value={eventData.clientDocument || ""}
+                    value={eventData.clientEmail || ""}
                     onChange={handleChangeForm}
                   />
                 </div>
