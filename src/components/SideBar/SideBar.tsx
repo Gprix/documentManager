@@ -13,6 +13,7 @@ import CalendarSVG from "images/icons/calendar.svg";
 import DiscSVG from "images/icons/disc.svg";
 import DocPageSVG from "images/icons/doc-page.svg";
 import NotificationsSVG from "images/icons/notifications.svg";
+import CopyToClipboardButton from "../shared/CopyToClipboard/CopyToClipboard";
 
 const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
   const { selectedWorkspace } = useWorkspace();
@@ -23,8 +24,9 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
     return (
       <div
         className={[
-          "flex flex-col items-center rounded-lg mt-4 py-5",
-          "transition-md",
+          "flex flex-col items-center rounded-lg mt-4 py-3 mx-2 transition-md",
+          "hover:bg-primaryMedium hover:cursor-pointer hover:shadow",
+          "active:bg-primaryDark active:shadow-none",
         ].join(" ")}
       >
         <Image
@@ -34,6 +36,7 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
           className="rounded-full"
           alt="Profile picture"
         />
+        <CopyToClipboardButton className="mt-2" text={uid} />
       </div>
     );
   };
@@ -55,7 +58,7 @@ const Sidebar = forwardRef<HTMLDivElement, SideBarProps>((props, ref) => {
     <aside
       className={[
         "Sidebar",
-        "bg-primaryDark w-[96px] py-6",
+        "bg-primaryDark w-[96px] py-6 overflow-hidden",
         "flex flex-col justify-between items-center",
       ].join(" ")}
       id="sidebar"
