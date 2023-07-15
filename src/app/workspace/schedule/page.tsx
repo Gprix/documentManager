@@ -415,14 +415,6 @@ const schedulePage = () => {
           Añadir
         </button>
       </div>
-      <div className="fixed top-[10%] left-[50%]">
-        <Link
-          href="/workspace/publishdocs"
-          className=" bg-[#FF4D84] px-2 rounded-md text-[#FAFAFA] text-2l p-2"
-        >
-          Send
-        </Link>
-      </div>
       <div className={`flex gap-4 wrap ${!modalFlag ? "hidden" : ""}`}>
         {/* putt hidden in the first conditional */}
         {renderEventForm()}

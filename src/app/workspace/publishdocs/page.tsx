@@ -19,10 +19,10 @@ const PublishDocs = () => {
   const { selectedWorkspace } = useWorkspace();
 
   useEffect(() => {
-    // if (!selectedWorkspace) return;
-    // const { uid: workspaceId } = selectedWorkspace;
+    if (!selectedWorkspace) return;
+    const { uid: workspaceId } = selectedWorkspace;
     getInfoUser();
-    getDocusComponents("1a56661e-c1f3-4b57-9db5-dfd4ee08db19" || "workspaceId");
+    getDocusComponents(workspaceId);
   }, []);
 
   //@ts-ignore
