@@ -1,5 +1,5 @@
 import Image from "next/image";
-import WavesSVG from "../../../public/images/waves.svg";
+import WavesSVG from "images/waves.svg";
 import WorkspaceSetup from "@/components/workspace/WorkspaceSetup/WorkspaceSetup";
 
 const WorkspacePage = () => {

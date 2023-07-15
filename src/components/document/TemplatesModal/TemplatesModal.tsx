@@ -24,7 +24,7 @@ export const TemplatesModal = (props: TemplatesModalProps) => {
   return (
     <Modal
       onClose={onClose}
-      className={`TemplatesModal centered-relative pb-6 ${className}`}
+      className={`TemplatesModal centered-relative pb-6 w-[90%] ${className}`}
     >
       <h2 className="ml-6 font-medium text-xl mt-8 mb-6">Plantillas</h2>
       <DocumentActions

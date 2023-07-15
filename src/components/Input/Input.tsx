@@ -2,7 +2,7 @@
 
 import Button from "@/components/shared/Button/Button";
 import { InputProps } from "./Input.types";
-import RightArrowSVG from "../../../public/images/icons/right-arrow.svg";
+import RightArrowSVG from "images/icons/right-arrow.svg";
 import { useState } from "react";
 
 const Input = (props: InputProps) => {

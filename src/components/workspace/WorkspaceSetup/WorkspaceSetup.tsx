@@ -1,14 +1,14 @@
 "use client";
 
 import { WorkspaceSetupProps } from "./WorkspaceSetup.types";
-import PatternIMG from "../../../../public/images/auth/pattern.png";
+import PatternIMG from "images/auth/pattern.png";
 import Image from "next/image";
 import Button from "@/components/shared/Button/Button";
 import GAccountDropdown from "@/components/GAccountDropdown/GAccountDropdown";
 import { useRouter } from "next/navigation";
 import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { writeWorkspace } from "@/services/workspace/workspace.service";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/auth/auth.context.hooks";
 import { Workspace } from "@/services/workspace/workspace.service.types";
 
@@ -33,21 +33,19 @@ const WorkspaceSetup = (props: WorkspaceSetupProps) => {
     getWorkspaces();
   };
 
-  useLayoutEffect(() => {
-    setSelectedWorkspace(undefined);
-  }, [setSelectedWorkspace]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!uid) return;
     getWorkspaces();
-  }, [getWorkspaces, uid]);
+  }, [workspaces, uid]);
 
   const renderWorkspaceList = () => {
     return (
       <section className="px-12">
-        <p className="text-black font-medium text-xl mt-8 mb-6">
-          Mis espacios de trabajo
-        </p>
+        {workspaces.length ? (
+          <p className="text-black font-medium text-xl mt-8 mb-6">
+            Mis espacios de trabajo
+          </p>
+        ) : null}
         <ul className="columns-2">
           {workspaces.map((workspace) => (
             <li
@@ -66,7 +64,7 @@ const WorkspaceSetup = (props: WorkspaceSetupProps) => {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center z-10">
       <GAccountDropdown className="pb-6 mx-auto" />
-      <div className="bg-white rounded-2xl pb-6 overflow-clip w-[566px]">
+      <div className="bg-white rounded-lg shadow-md pb-6 overflow-clip w-[566px]">
         <Image src={PatternIMG} alt="" className="" />
         {workspaces ? renderWorkspaceList() : null}
         <Button

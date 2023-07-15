@@ -2,7 +2,7 @@
 
 import { GoBackProps } from "./GoBack.types";
 import { useRouter } from "next/navigation";
-import LeftArrowSVG from "../../../public/images/icons/left-arrow.svg";
+import LeftArrowSVG from "images/icons/left-arrow.svg";
 import Image from "next/image";
 
 const GoBack = (props: GoBackProps) => {
