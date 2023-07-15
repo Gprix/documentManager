@@ -7,19 +7,22 @@ import { useWorkspace } from "@/contexts/workspace/workspace.context.hooks";
 import { DocumentPreview } from "@/components/document/DocumentPreview/DocumentPreview";
 import { getPreviewNodesUtility } from "@/utils/document.utils";
 import Select from "react-select";
-import { set } from "date-fns";
+import enviarCorreo from "@/services/email/email.service";
 
 const PublishDocs = () => {
   const [docusComponents, setDocusComponents] = useState([]);
-  const [infoUser, setInfoUser] = useState([]);
+  const [infoUser, setInfoUser] = useState([{
+    value: "",
+    label: "Seleccionar",
+  }]);
   // @ts-ignore
   const { selectedWorkspace } = useWorkspace();
 
   useEffect(() => {
-    // if (!selectedWorkspace) return;
-    // const { uid: workspaceId } = selectedWorkspace;
+    if (!selectedWorkspace) return;
+    const { uid: workspaceId } = selectedWorkspace;
     getInfoUser();
-    getDocusComponents("1a56661e-c1f3-4b57-9db5-dfd4ee08db19" || "workspaceId");
+    getDocusComponents(workspaceId);
   }, []);
 
   //@ts-ignore
@@ -48,35 +51,58 @@ const PublishDocs = () => {
         value: doc.data().clientEmail || "",
         label: `${doc.data().clientName} - ${doc.data().clientEmail || ""}`,
       };
-      
+
       //@ts-ignore
-      if((doc.data().clientName || doc.data().clientEmail)){
-        console.log(temp)
+      if (doc.data().clientName && doc.data().clientEmail) {
+        console.log(temp);
+        // @ts-ignore
         setInfoUser((prev) => [...prev, temp]);
       }
     });
   };
 
+  //@ts-ignore
+  const handlerNotificar = (obj) => {
+    enviarCorreo(obj);
+  };
+
+  //@ts-ignore
   const RenderDoc = (props) => {
+    const [selectedOption, setSelectedOption] = useState(null);
     let tempDoc = props.documento.document;
     var color = "bg-gray-400";
-    if (tempDoc.estado === "Publicado") {
-      color = "bg-green-500";
-    } else if (tempDoc.estado === "En revisión") {
-      color = "bg-yellow-500";
-    } else if (tempDoc.estado === "No publicado") {
-      color = "bg-red-500";
+    var estado_label = "No Solicitado";
+    if (tempDoc.estado === "pending") {
+      color = "bg-yellow-300";
+      estado_label = "Pendiente";
+    } else if (tempDoc.estado === "approved") {
+      color = "bg-green-300";
+      estado_label = "Aprovado";
+    } else if (tempDoc.estado === "published") {
+      color = "bg-blue-300";
+      estado_label = "Publicado";
+    } else if (tempDoc.estado === "rejected") {
+      color = "bg-red-300";
+      estado_label = "Rechazado";
     }
+
     const style = "h-3 w-3 rounded-full " + color;
 
     const previewNodes = getPreviewNodesUtility(tempDoc.docData);
 
-    const userList = [
-      { value: "Usuario 1", label: "usuario1@example.com" },
-      { value: "Usuario 2", label: "usuario2@example.com" },
-      { value: "Usuario 3", label: "usuario3@example.com" },
-      // Agrega más usuarios aquí
-    ];
+    const myTemp = {
+      // @ts-ignore
+      target: `${selectedOption ? selectedOption.value : ""}`,
+      // @ts-ignore
+      name: `${selectedOption ? selectedOption.label.split(" - ")[0] : ""}`,
+      from_name: "Docunot",
+      message: `Tenemos su documento "${tempDoc.title}" en estado "${estado_label}"`,
+    };
+
+    // @ts-ignore
+    const handleSelectChange = (selected) => {
+      setSelectedOption(selected);
+    };
 
     return (
       <div className="flex-col w-[80vw]">
@@ -90,13 +116,24 @@ const PublishDocs = () => {
             documentName=""
           />
 
-          <Select className="w-fit-content" options={infoUser} isSearchable />
+          <Select
+            className="w-fit-content max-w-[15vw]"
+            options={infoUser}
+            isSearchable
+            value={selectedOption}
+            onChange={handleSelectChange}
+          />
 
           <div className="flex flex-row justify-center items-center gap-2">
             <div className={style}></div>
-            <div>{tempDoc.estado}</div>
+            <div>{estado_label}</div>
           </div>
-          <button>Notificar</button>
+          <button
+            className="bg-transparent border border-gray-400 text-gray-400 py-2 px-4 rounded hover:bg-gray-400 hover:text-white transition-colors duration-300"
+            onClick={() => handlerNotificar(myTemp)}
+          >
+            Notificar
+          </button>
         </div>
       </div>
     );

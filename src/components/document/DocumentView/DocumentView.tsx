@@ -18,12 +18,11 @@ import { updateTemplate } from "@/services/template/template.service";
 import { WriteTemplatePayload } from "@/services/template/template.service.types";
 import EditableText from "@/components/shared/EditableText/EditableText";
 import { EditableTextRef } from "@/components/shared/EditableText/EditableText.types";
-import {
-  createErrorNotification,
-  createSuccessNotification,
-} from "@/utils/notifications.utils";
+import { createErrorNotification } from "@/utils/notifications.utils";
 import { exportDocument, importDocument } from "@/utils/document.utils";
 import { Modal } from "@/components/shared/Modal/Modal";
+import { createSuccessNotification } from "@/utils/notifications.utils";
+import Link from "next/link";
 
 export const DocumentView = (props: DocumentViewProps) => {
   const { className = "" } = props;
@@ -101,6 +100,8 @@ export const DocumentView = (props: DocumentViewProps) => {
       console.error(e);
     }
   };
+
+  const handlePublishClick = async () => {};
 
   useEffect(() => {
     if (!documentType) return;
@@ -219,6 +220,22 @@ export const DocumentView = (props: DocumentViewProps) => {
                   </p>
                 ) : null}
               </div>
+            </div>
+            <div className="flex items-center  mr-4 ">
+              <Link
+                href="/workspace/publishdocs"
+                className="text-[#FF4D84] underline"
+              >
+                Ver estado
+              </Link>
+            </div>
+            <div className="flex items-center  mr-4 ">
+              <button
+                onClick={handlePublishClick}
+                className="text-[#FF4D84] underline"
+              >
+                Publicar
+              </button>
             </div>
             <Button
               onClick={handleButtonClick}
