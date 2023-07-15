@@ -11,6 +11,8 @@ export interface BaseNodeProps {
   children?: React.ReactNode;
   /** Custom className. */
   className?: string;
+  /** Custom className for inner content */
+  contentClassName?: string;
   /** Node data. */
   data?: NodeRawData;
 }

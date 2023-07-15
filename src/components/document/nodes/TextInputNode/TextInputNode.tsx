@@ -40,7 +40,13 @@ export const TextInputNode = (props: TextInputNodeProps) => {
 
   return (
     <BaseNode
-      className={`TextInputNode px-3 pt-1 hover:cursor-text ${linkedStyle} ${className}`}
+      className="TextInputNode"
+      contentClassName={[
+        "px-3 pt-1 hover:cursor-text",
+        "flex flex-col justify-center",
+        linkedStyle,
+        className,
+      ].join(" ")}
     >
       <input
         value={value}
