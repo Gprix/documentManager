@@ -27,6 +27,8 @@ const CalendarWeek = ({startDate, appointments, selectedHour, renderAppointment,
       return horaA.localeCompare(horaB);
     };
 
+    let count = 0;
+
     return (
       <div className="flex flex-row w-full h-full gap-2">
         {days.map((date) => {
@@ -35,9 +37,10 @@ const CalendarWeek = ({startDate, appointments, selectedHour, renderAppointment,
 
           const citasOrdenadas = citas.sort(ordenarPorHora);
 
-          citas.map(cita => console.log(cita.fecha, " => ", cita.indice))
+          count += 1
+
           return (
-            <div className="flex-grow h-[60vh]">
+            <div key={count} className="flex-grow h-[60vh]">
               <div className="flex justify-center mb-3 font-bold">
                 {date
                   .toLocaleDateString("es-PE", { weekday: "long" })
@@ -47,7 +50,7 @@ const CalendarWeek = ({startDate, appointments, selectedHour, renderAppointment,
               </div>
               <div
                 key={date.toDateString()}
-                className="border-2 border-gray-300 rounded-md cursor-pointer hover:bg-gray-100 h-full"
+                className="border-2 border-gray-300 rounded-md hover:bg-gray-100 h-full"
               >
                 <div className="flex justify-center text-2xl font-semibold center mt-5">
                   {date.toLocaleDateString() ===

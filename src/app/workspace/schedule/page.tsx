@@ -7,6 +7,7 @@ import { format, parse, startOfToday, add } from "date-fns";
 import CalendarWeek from "@/components/calendar/calendarWeek";
 import CalendarMonth from "@/components/calendar/calendarMonth";
 import enviarCorreo from "@/services/email/email.service";
+import Link from "next/link";
 
 const schedulePage = () => {
   const [modalFlag, setModal] = useState<boolean>(false);
@@ -150,8 +151,6 @@ const schedulePage = () => {
     }
   };
 
-
-
   const handlerEmail = (event: React.MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
 
@@ -159,10 +158,10 @@ const schedulePage = () => {
       target: "andreeg199@gmail.com",
       name: "Usuario",
       from_name: "Docunot",
-      message: "Esto es un mensaje automatico de Document Manager"
+      message: "Esto es un mensaje automatico de Document Manager",
     };
 
-    enviarCorreo(templateParams)
+    enviarCorreo(templateParams);
   };
 
   const renderEventForm = () => {
@@ -213,7 +212,7 @@ const schedulePage = () => {
                     type="text"
                     name="clientName"
                     // @ts-ignore
-                    value={eventData.clientName}
+                    value={eventData.clientName || ""}
                     onChange={handleChangeForm}
                   />
                 </div>
@@ -224,7 +223,7 @@ const schedulePage = () => {
                     type="text"
                     name="clientDocument"
                     // @ts-ignore
-                    value={eventData.clientDocument}
+                    value={eventData.clientDocument || ""}
                     onChange={handleChangeForm}
                   />
                 </div>
@@ -239,7 +238,7 @@ const schedulePage = () => {
                   type="date"
                   name="date"
                   // @ts-ignore
-                  value={eventData.date}
+                  value={eventData.date || ""}
                   onChange={handleChangeForm}
                 />
                 <input
@@ -247,7 +246,7 @@ const schedulePage = () => {
                   type="time"
                   name="time"
                   // @ts-ignore
-                  value={eventData.time}
+                  value={eventData.time || ""}
                   onChange={handleChangeForm}
                 />
               </div>
@@ -281,7 +280,7 @@ const schedulePage = () => {
                 type="text"
                 name="description"
                 // @ts-ignore
-                value={eventData.description}
+                value={eventData.description || ""}
                 onChange={handleChangeForm}
               />
             </div>
@@ -313,7 +312,13 @@ const schedulePage = () => {
 
   const renderAppointment = (title: string, hour: string) => {
     return (
-      <button className="flex border border-solid border-green-500 rounded-lg flex-col justify-center items-center w-full h-full mt-4 ">
+      <button
+        key={title}
+        className="flex border border-solid border-green-500 rounded-lg flex-col justify-center items-center w-full h-full mt-4 "
+        onClick={() => {
+          setModal(true);
+        }}
+      >
         <div className="flex flex-col justify-center items-center w-full h-full">
           <p className="text-xs font-semibold">{title}</p>
           <p className="text-xs font-semibold">{hour}</p>
@@ -334,17 +339,13 @@ const schedulePage = () => {
           <div className="flex items-center gap-4">
             <button
               className="cursor-pointer font-bold"
-              onClick={() => {
-                handlePrevEvent;
-              }}
+              onClick={handlePrevEvent}
             >
               &lt;
             </button>
             <button
               className="cursor-pointer font-bold"
-              onClick={() => {
-                handleNextEvent;
-              }}
+              onClick={handleNextEvent}
             >
               &gt;
             </button>
@@ -384,13 +385,12 @@ const schedulePage = () => {
         </button>
       </div>
       <div className="fixed top-[10%] left-[50%]">
-        <button
+        <Link
+          href="/workspace/publishdocs"
           className=" bg-[#FF4D84] px-2 rounded-md text-[#FAFAFA] text-2l p-2"
-          //@ts-ignore
-          onClick={handlerEmail}
         >
           Send
-        </button>
+        </Link>
       </div>
       <div className={`flex gap-4 wrap ${!modalFlag ? "hidden" : ""}`}>
         {/* putt hidden in the first conditional */}
