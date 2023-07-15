@@ -13,8 +13,9 @@ export const writeWorkspace = async (payload: WriteWorkspacePayload) => {
       ...payload,
       uid,
       ownerUid: user.uid,
-      members: [user.uid],
+      members: [user.uid, ...(payload.members ?? [])],
     });
+    return uid;
   } catch (e) {
     console.error(e);
   }

@@ -6,4 +6,6 @@ export interface Workspace {
 }
 
 export interface WriteWorkspacePayload
-  extends Omit<Workspace, "uid" | "ownerUid" | "members"> {}
+  extends Omit<Workspace, "uid" | "ownerUid" | "members"> {
+  members?: string[];
+}

@@ -9,6 +9,9 @@ export interface Document {
   documentType: DocumentType;
 }
 
+export interface DocumentExportData
+  extends Omit<Document, "uid" | "authorId" | "workspaceId"> {}
+
 export type DocumentLineRawData = DocumentNodeRawData[];
 
 export type DocumentLineRawDataPosition = {
