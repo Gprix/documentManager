@@ -11,7 +11,7 @@ import Select, { SingleValue } from "react-select";
 import { getLastFromPathname } from "@/utils/common.utils";
 
 export const TextBlockNode = (props: TextBlockNodeProps) => {
-  const { className = "" } = props;
+  const { className = "", editable = true } = props;
   const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const { selectedDocument } = useDocument();
   const { selectedDatablocks } = useDatablocks();
@@ -73,10 +73,10 @@ export const TextBlockNode = (props: TextBlockNodeProps) => {
   return (
     <>
       <BaseNode
-        className="TextBlockNode overflow-visible !rounded-lg"
+        className={["TextBlockNode", "overflow-visible !rounded-lg"].join(" ")}
         contentClassName={[
-          "hover:bg-gray-200 !rounded-lg",
-          "pl-3 pr-1 pt-2 pb-1",
+          editable ? "hover:bg-gray-200" : "",
+          "pl-3 pr-1 pt-2 pb-1 !rounded-lg",
           className,
         ].join(" ")}
       >

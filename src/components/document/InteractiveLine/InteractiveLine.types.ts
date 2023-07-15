@@ -19,6 +19,7 @@ export interface InteractiveLineProps {
   orderIndex: number;
   /** Callback function to update node data. */
   onNodeUpdate: (node: DocumentNodeRawData) => void;
+  isEditable?: boolean;
 }
 
 /**

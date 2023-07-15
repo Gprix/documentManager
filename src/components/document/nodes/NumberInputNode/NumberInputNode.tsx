@@ -4,7 +4,7 @@ import { NumberInputNodeProps } from "./NumberInputNode.types";
 import { useDocument } from "@/contexts/document/document.context.hooks";
 
 export const NumberInputNode = (props: NumberInputNodeProps) => {
-  const { className = "" } = props;
+  const { className = "", editable = true } = props;
   const { data, rowIndex, inlineIndex, onNodeUpdate } = props;
   const { selectedDocument } = useDocument();
   const [value, setValue] = useState(0);
@@ -39,7 +39,11 @@ export const NumberInputNode = (props: NumberInputNodeProps) => {
   return (
     <BaseNode
       className="NumberInputNode"
-      contentClassName={["px-3 pt-1 hover:cursor-text", className].join(" ")}
+      contentClassName={[
+        "px-3 pt-1",
+        editable ? "hover:cursor-text" : "",
+        className,
+      ].join(" ")}
     >
       <input
         onChange={(e) => {

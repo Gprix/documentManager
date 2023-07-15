@@ -27,10 +27,6 @@ body {
   }
 
   /* Sidebar */
-  .Sidebar {
-    @apply h-full w-[10%] flex flex-col justify-between items-center pb-8 pt-4 px-2;
-  }
-
   .Sidebar__element {
     @apply text-center text-black;
   }
@@ -48,6 +44,7 @@ body {
     @apply rounded-full border border-black px-4 py-1 mb-6;
   }
 
+  /* Utilities */
   .full-screen {
     @apply w-full h-screen max-h-screen max-w-[100vw];
   }
@@ -60,7 +57,15 @@ body {
     @apply focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0;
   }
 
+  .force-full-width {
+    @apply !block !max-w-[100vw] !w-[9999px];
+  }
+
   .context-menu__item {
     @apply w-full block px-3 py-2 first:pt-2 last:pb-2 only:py-2 text-left hover:cursor-pointer hover:bg-gray-200 transition-colors duration-150;
+  }
+
+  .transition-md {
+    @apply transition-all duration-150;
   }
 }

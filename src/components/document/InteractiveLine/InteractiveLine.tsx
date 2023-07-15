@@ -23,7 +23,7 @@ import {
 
 const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
   (props, ref) => {
-    const { className = "" } = props;
+    const { className = "", isEditable = true } = props;
     const { data, orderIndex, onNodeUpdate } = props;
     const [nodes, setNodes] = useState<React.ReactNode[]>([]);
 
@@ -43,6 +43,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextNodeRawData}
                 key={`text-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -56,6 +57,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextBlockNodeRawData}
                 key={`text-block-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -69,6 +71,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as TextInputNodeRawData}
                 key={`text-input-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -82,6 +85,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
                 rowIndex={rowIndex ?? orderIndex}
                 data={nodeData as NumberInputNodeRawData}
                 key={`number-input-node-${inlineIndex}-${rowIndex}`}
+                editable={isEditable}
               />,
             ]);
             break;
@@ -178,7 +182,7 @@ const InteractiveLine = forwardRef<HTMLDivElement, InteractiveLineProps>(
         className={`InteractiveLine flex gap-x-2 shadow-gray-200 hover:shadow-transparent transition-colors duration-150 pb-2 group ${className}`}
       >
         {nodes}
-        <AddNode />
+        {isEditable ? <AddNode /> : null}
       </div>
     );
   }
